@@ -1,0 +1,9 @@
+{% load bootstrap %}
+
+<form id="{{ajax_form_id}}" action="" method="post" class="form-inline">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <p>
+        <input type="submit" value="{{submit_button_text}}"/>
+    </p>
+</form>

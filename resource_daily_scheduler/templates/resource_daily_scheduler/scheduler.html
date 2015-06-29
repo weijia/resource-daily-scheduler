@@ -1,0 +1,103 @@
+{% extends "resource_daily_scheduler/resource_scheduler_bootstrap_base.html" %}
+{% load bootstrap %}
+{% load admin_static %}
+{% load static %}
+
+{% block resource_list %}
+{% autoescape off %}
+{{resource_list}}
+{% endautoescape %}
+{% endblock %}
+
+{% block resource_type %}
+'{{resource_type}}'
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type='text/javascript' src='{% static 'js/jquery-ui.js' %}'></script>
+<link rel='stylesheet' type='text/css' href='{% static 'css/jquery-ui/smoothness/jquery-ui.css' %}' />
+<script src='/static/resource_daily_scheduler/csrf.js'></script>
+<script src="/static/resource_daily_scheduler/ajaxsubmit.js"></script>
+<script src="/static/resource_daily_scheduler/resource_daily_scheduler.js"></script>
+<style>
+    .fc-time {display:none}
+</style>
+<script>
+    var isAdmin = {{is_admin}};
+</script>
+{% endblock %}
+
+{% block full_calendar_params %}
+lazyFetching: true,
+slotDuration: "24:00:00",
+eventOverlap: false, // will cause the event to take up entire resource height
+eventClick: onEventClick,
+dayClick: onDayClicked,
+contentHeight: 500,
+contentwidth: 500,
+timezone:"local",
+resourceRender: function(data, resourceTd) {
+    //dataTds.css('background', 'blue');
+    //console.log(resourceTd);
+    $(".fc-cell-text", resourceTd).wrapInner('<a href="{{resource_detail}}'+data.id+'/"></a>');
+},
+resourceColumns_no: [
+    {
+        text: function(resource) {
+            var message = resource.message;
+            return message;
+        },
+        render: function(resource, el) {
+
+            //el.css('background-color', 'red');
+            //el.text(resource.title);
+
+        }
+    }
+    // other columns...
+],
+{% endblock %}
+
+
+{% block content_header %}
+<!--<button id="addResourceButton">Add resource</button>-->
+<div style="display:none">
+<div id="dialog">
+<form id="newResourceForm" action="create_resource/"
+      method="post" class="form-inline">
+    {% csrf_token %}
+    {{ new_resource_form|bootstrap }}
+    <p>
+        <input id="newResourceFormSubmit" type="submit" value="Submit"/>
+    </p>
+</form>
+</div>
+<div id="dialog-confirm" title="Are you sure to approve the request?">
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are you sure to approve the request?</p>
+</div>
+
+<div id="newBookingReqDialog">
+<form id="newBookingReqForm" action="create_booking_req/"
+      method="post" class="form-inline">
+    {% csrf_token %}
+    {{ booking_req_form|bootstrap }}
+    <p>
+        <input id="newBookingReqFormSubmit" type="submit" value="Submit"/>
+    </p>
+</form>
+</div>
+<div id="bookingReqEditDialog">
+</div>
+</div>
+{% endblock %}
+
+{% block content_foot %}
+<span id="draft" style="width:100px;height:50px;padding:20px">Not approved</span>
+<span id="approved" style="width:100px;height:50px;padding:20px">Approved</span>
+<span id="ongoing" style="width:100px;height:50px;padding:20px">Ongoing</span>
+<!--<div id=""></div>-->
+{% endblock %}
+{% block event_source %}
+'{{get_schedule}}'
+{% endblock %},
