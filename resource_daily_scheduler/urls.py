@@ -4,6 +4,7 @@ from django.views.generic.simple import redirect_to
 from djangoautoconf.class_based_views.create_view_factory import create_ajaxable_view_from_model
 from resource_daily_scheduler.booking_req_views import AjaxableBookingRequestCreateView, \
     AjaxableBookingRequestUpdateView
+from resource_daily_scheduler.jquery_gantt_views import ResourceScheduleGanttView
 from resource_daily_scheduler.models import BookableResource, BookingRequest
 from resource_daily_scheduler.resource_views import ResourceAjaxMixin
 from resource_daily_scheduler.views import ResourceScheduleTemplateView, \
@@ -22,7 +23,8 @@ urlpatterns = patterns(
     url(r'^requests/', include(resource_booking_req_views.urls)),
     # url(r'^resources_ajax/', include(resource_views_ajax.urls)),
     # url(r'^requests_ajax/', include(resource_booking_req_views_ajax.urls)),
-    url(r'^$', login_required(ResourceScheduleTemplateView.as_view()), name="resource_scheduler"),
+    # url(r'^$', login_required(ResourceScheduleTemplateView.as_view()), name="resource_scheduler"),
+    url(r'^$', login_required(ResourceScheduleGanttView.as_view()), name="resource_scheduler_jquery_gantt"),
 
     url(r'^get_schedule/', GetScheduleView.as_view(), name="get_schedule"),
     url(r'^approve_request/', ApproveRequestView.as_view(), name="approve_request"),

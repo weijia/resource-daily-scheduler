@@ -1,0 +1,3 @@
+[submodule "resource_daily_scheduler/static/resource_daily_scheduler/jquery.gantt"]
+	path = resource_daily_scheduler/static/resource_daily_scheduler/jquery.gantt
+	url = https://github.com/weijia/jQuery.Gantt.git
