@@ -1,0 +1,5 @@
+table.calendar {border-collapse:collapse;height:500px}
+table.calendar thead tr {height:40px}
+table.calendar td {border:solid 1px #DDD}
+table.calendar tr td  div {width:25px}
+div.calendarViewPort {width:900px;overflow-x: auto;}
