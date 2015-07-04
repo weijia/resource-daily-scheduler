@@ -20,10 +20,15 @@ $.widget( "resourceScheduler.tableCalendar", {
         var year = start.getFullYear();
         var end = new Date();
         end.setYear(year+1);
+        // TODO: use a separate table for rows, so we will not get the limitation
+        // TODO: on the height setting of the table. Check fullcalendar.
         this.element.html('<div class="calendarViewPort">'+
         '<div><table class="calendar"'+
         '><thead><tr></tr></thead><tr class="content"></tr>'+
-        '<tr class="content"></tr></table></div></div>');
+        '<tr class="content"></tr>'+
+        '<tr class="content"></tr>'+
+        '<tr class="lastLine"></tr>'+
+        '</table></div></div>');
         var entries = [];
         var contentEntries = [];
         var borderColor = this.options.borderColor;
@@ -38,6 +43,7 @@ $.widget( "resourceScheduler.tableCalendar", {
         });
         $("thead > tr", this.element).html('<td>Item title</td>'+entries.join(""));
         $("tr.content", this.element).html('<td></td>'+contentEntries.join(""));
+        $("tr.lastLine", this.element).html('<td></td>'+contentEntries.join(""));
     },
     // Return an array of Date objects between `from` and `to`
     getDays: function (from, to) {
