@@ -4,4 +4,4 @@ table.calendar thead {background-color:#F6F6F6}
 table.calendar .weekend {color: #939496}
 table.calendar td {border:solid 1px #DDD}
 table.calendar tr td  div {width:25px;}
-div.calendarViewPort {width:900px;overflow-x: auto;height:600px}
+div.calendarViewPort {width:900px;overflow-x: auto;height:600px;border-color: #DDD; border-style: solid;}
