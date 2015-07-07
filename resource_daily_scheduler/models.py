@@ -20,6 +20,7 @@ def get_timezone_aware_datetime_from_date_str(date_str):
 
 class BookableResource(models.Model):
     alias = models.CharField(max_length=256, null=True, blank=True)
+    approver = models.ForeignKey(User)
 
     def get_title(self):
         """
