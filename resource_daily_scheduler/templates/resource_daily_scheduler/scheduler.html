@@ -15,10 +15,12 @@
 
 {% block extrahead %}
 {{ block.super }}
+
 <script type='text/javascript' src='{% static 'js/jquery-ui.js' %}'></script>
-<link rel='stylesheet' type='text/css' href='{% static 'css/jquery-ui/smoothness/jquery-ui.css' %}' />
+<link rel='stylesheet' type='text/css' href="{% static 'css/jquery-ui/smoothness/jquery-ui.css' %}" />
+<link rel='stylesheet' type='text/css' href="{% static 'resource_daily_scheduler/table_calendar.css' %}" />
 <script src='/static/resource_daily_scheduler/csrf.js'></script>
-<script src="/static/resource_daily_scheduler/ajaxsubmit.js"></script>
+<script src="{% static 'resource_daily_scheduler/ajaxsubmit.js' %}"></script>
 <script src="/static/resource_daily_scheduler/resource_daily_scheduler.js"></script>
 <style>
     .fc-time {display:none}
@@ -93,9 +95,10 @@ resourceColumns_no: [
 {% endblock %}
 
 {% block content_foot %}
-<span id="draft" style="width:100px;height:50px;padding:20px">Not approved</span>
-<span id="approved" style="width:100px;height:50px;padding:20px">Approved</span>
-<span id="ongoing" style="width:100px;height:50px;padding:20px">Ongoing</span>
+<span class="legend" style="background-color:{{color_for_need_approval_from_others}}">Need other people's approval</span>
+<span class="legend" style="background-color:{{color_for_approved}}">Approved</span>
+<span class="legend" style="background-color:{{color_for_ongoing}}">Ongoing</span>
+<span class="legend" style="background-color:{{color_for_need_your_approval}}">Need your approval</span>
 <!--<div id=""></div>-->
 {% endblock %}
 {% block event_source %}

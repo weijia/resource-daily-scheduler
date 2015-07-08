@@ -1,14 +1,26 @@
 {% extends "resource_daily_scheduler/jquery_gantt_blocks.html" %}
 {% block data_source %}
 [{
-					name: "Sprint 0",
-					desc: "Analysis",
-					values: [{
-						id: "t01",
-						from: "/Date(1320192000000)/",
-						to: "/Date(1322401600000)/",
-						label: "Requirement Gathering",
-						customClass: "ganttRed"
-					}]
-				}]
+    name: "Sprint 0",
+    values: [{
+        id: "t01",
+        from: "2015-07-02",
+        to: "2015-09-01",
+        label: "Requirement Gathering",
+        customClass: "ganttRed"
+    }]
+},
+{
+    name: "Sprint 1",
+    values: []
+},
+{
+    name: "Sprint 2",
+    values: []
+},
+{
+    name: "Sprint 3",
+    values: []
+}
+]
 {% endblock %}

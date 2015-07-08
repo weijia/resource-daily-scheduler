@@ -15,7 +15,14 @@ from resource_daily_scheduler.resource_views import BookableResourceCreateView
 __author__ = 'weijia'
 
 
-class ResourceScheduleTemplateView(TemplateView):
+class ColorSchema(object):
+    WAITING_FOR_YOUR_APPROVAL_COLOR = "red"
+    WAITING_FOR_APPROVAL_FROM_OTHERS_COLOR = "gray"
+    APPROVED_COLOR = "blue"
+    ONGOING_COLOR = "green"
+
+
+class ResourceScheduleTemplateView(TemplateView, ColorSchema):
     template_name = "resource_daily_scheduler/scheduler.html"
     bookable_resource_class = BookableResource
     get_schedule_url_name = 'get_schedule'
@@ -39,13 +46,17 @@ class ResourceScheduleTemplateView(TemplateView):
         default_context["booking_req_form"] = self.request_create_view().get_form_class()
         default_context["is_admin"] = "false"
         default_context["resource_detail"] = self.resource_detail
+        default_context["color_for_need_approval_from_others"] = self.WAITING_FOR_APPROVAL_FROM_OTHERS_COLOR
+        default_context["color_for_approved"] = self.APPROVED_COLOR
+        default_context["color_for_ongoing"] = self.ONGOING_COLOR
+        default_context["color_for_need_your_approval"] = self.WAITING_FOR_YOUR_APPROVAL_COLOR
 
         if self.request.user.has_perm(self.resource_permission_id):
             default_context["is_admin"] = "true"
         return default_context
 
 
-class GetScheduleView(View):
+class GetScheduleView(View, ColorSchema):
     booking_request_class = BookingRequest
 
     def get(self, request, *args, **kwargs):
@@ -58,11 +69,13 @@ class GetScheduleView(View):
         res_query = self.booking_request_class.objects.filter(~(end_query | start_query))
         res = []
         for event in res_query:
-            color = "gray"
+            color = self.WAITING_FOR_APPROVAL_FROM_OTHERS_COLOR
             if event.is_approved:
-                color = "yellow"
+                color = self.APPROVED_COLOR
             if event.is_ongoing:
-                color = "green"
+                color = self.ONGOING_COLOR
+            if self.request.user.has_perm("change_bookableresource", event.resource):
+                color = self.WAITING_FOR_YOUR_APPROVAL_COLOR
             res.append({"id": "%d" % event.pk, "resourceId": "%d" % event.resource.pk, "start": str(event.start),
                         "end": str(event.end), "title": event.project, "color": color})
         return HttpResponse(json.dumps(res), content_type="application/json")

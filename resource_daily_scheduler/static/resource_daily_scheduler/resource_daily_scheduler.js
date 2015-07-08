@@ -1,8 +1,3 @@
-var notApprovedRequestColor = "gray";
-var approvedRequestColor = "yellow";
-var ongoingRequestColor = "green";
-
-
 function msIeVersion() {
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
@@ -99,9 +94,9 @@ $(function() { // document ready
         }
     });
 
-    $("#draft").css("background-color", notApprovedRequestColor);
-    $("#approved").css("background-color", approvedRequestColor);
-    $("#ongoing").css("background-color", ongoingRequestColor);
+//    $("#draft").css("background-color", notApprovedRequestColor);
+//    $("#approved").css("background-color", approvedRequestColor);
+//    $("#ongoing").css("background-color", ongoingRequestColor);
 
     if(hasCreatePermission()){
         $('.fc-toolbar .fc-left').prepend(
