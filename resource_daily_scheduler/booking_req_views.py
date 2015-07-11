@@ -66,16 +66,22 @@ class AjaxableBookingRequestCreateView(AjaxableResponseMixin, AjaxableFormContex
 
 
 class RequestApprovalMixin(object):
-    def is_valid_approval(self, approval_request):
+    def is_request_can_be_approved(self, approval_request):
         conflicts = self.model.objects.filter(
-            start__lte=approval_request.end,
+            start__lt=approval_request.end,
             end__gte=approval_request.start,
             resource=approval_request.resource,
-            is_approved=True
         )
-        if any(conflicts.filter(~Q(id=approval_request.pk))):
+        conflicts_filter = conflicts.filter(~Q(id=approval_request.pk)&(Q(is_approved=True)|Q(is_ongoing=True)))
+        # if any(conflicts_filter):
+        #     return False
+        for i in conflicts_filter:
             return False
-        return (approval_request.approver is None) and approval_request.is_approved
+        return True
+
+    def is_valid_approval(self, approval_request):
+        return (approval_request.approver is None) and approval_request.is_approved and \
+               self.is_request_can_be_approved(approval_request)
 
 
 class AjaxableBookingRequestUpdateView(AjaxableResponseMixin, AjaxableFormContextUpdateMixin, RequestApprovalMixin,
@@ -126,14 +132,45 @@ class ResourceApproverUpdater(object):
 
 
 class ColorSchema(object):
-    WAITING_FOR_YOUR_APPROVAL_COLOR = "red"
-    WAITING_FOR_APPROVAL_FROM_OTHERS_COLOR = "gray"
-    APPROVED_COLOR = "blue"
-    ONGOING_COLOR = "green"
+    COLOR_WAITING_FOR_YOUR_APPROVAL = "red"
+    COLOR_WAITING_FOR_APPROVAL_FROM_OTHERS = "gray"
+    COLOR_APPROVED = "blue"
+    COLOR_ONGOING = "green"
+    COLOR_CONFLICT = "black"
+    COLOR_CAN_BE_SET_TO_ONGOING = "DarkSlateGray"
+
+    def get_colors(self):
+        colors = {}
+        for attr in dir(ColorSchema):
+            if attr != attr.upper():
+                continue
+            if attr[:6] != "COLOR_":
+                continue
+            value = getattr(ColorSchema, attr)
+            attr_name = attr[6:].lower()
+            attr_name = attr_name.replace("_", " ")
+            colors[attr_name.capitalize()] = value
+        return colors
 
 
-class GetScheduleView(View, ColorSchema):
-    booking_request_class = BookingRequest
+# color_schema = {"Waiting for your approval": "red",
+#                 "Waiting for approval from others": "gray",
+#                 "Approved": "blue",
+#                 "On going": "green",
+#                 "Conflicted": "black",
+#                 "Approved, can be set to ongoing": "DarkSlateGray"
+#                 }
+
+
+class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
+    model = BookingRequest
+    # color_schema = {"Waiting for your approval": "red",
+    #                 "Waiting for approval from others": "gray",
+    #                 "Approved": "blue",
+    #                 "On going": "green",
+    #                 "Conflicted": "black",
+    #                 "Approved, can be set to ongoing": "DarkSlateGray"
+    #                 }
 
     def get(self, request, *args, **kwargs):
         data = retrieve_param(request)
@@ -142,28 +179,39 @@ class GetScheduleView(View, ColorSchema):
         end = get_timezone_aware_datetime_from_date_str(data["end"])
         start_query = Q(end__lt=start)
         end_query = Q(start__gt=end)
-        res_query = self.booking_request_class.objects.filter(~(end_query | start_query))
+        res_query = self.model.objects.filter(~(end_query | start_query))
         res = []
         for event in res_query:
-            color = self.WAITING_FOR_APPROVAL_FROM_OTHERS_COLOR
-            if event.is_approved:
-                color = self.APPROVED_COLOR
-            elif self.request.user.has_perm("change_bookableresource", event.resource):
-                color = self.WAITING_FOR_YOUR_APPROVAL_COLOR
-            if event.is_ongoing:
-                color = self.ONGOING_COLOR
+            color = self.get_color(event)
             res.append({"id": "%d" % event.pk, "resourceId": "%d" % event.resource.pk, "start": str(event.start),
                         "end": str(event.end), "title": event.project, "color": color})
         return HttpResponse(json.dumps(res), content_type="application/json")
 
+    def get_color(self, event):
+        color = self.COLOR_WAITING_FOR_APPROVAL_FROM_OTHERS
+        has_perm = self.request.user.has_perm("change_bookableresource", event.resource)
+        if event.is_approved:
+            if has_perm:
+                color = self.COLOR_CAN_BE_SET_TO_ONGOING
+            else:
+                color = self.COLOR_APPROVED
+        elif has_perm:
+            if self.is_request_can_be_approved(event):
+                color = self.COLOR_WAITING_FOR_YOUR_APPROVAL
+            else:
+                color = self.COLOR_CONFLICT
+        if event.is_ongoing:
+            color = self.COLOR_ONGOING
+        return color
+
 
 class ApproveRequestView(View, RequestApprovalMixin):
-    booking_request_class = BookingRequest
+    model = BookingRequest
 
     def get(self, request, *args, **kwargs):
         data = retrieve_param(request)
         req_id = data["requestId"]
-        r = self.booking_request_class.objects.get(pk=int(req_id))
+        r = self.model.objects.get(pk=int(req_id))
         if r.is_approved:
             r.is_approved = False
             result = "false"

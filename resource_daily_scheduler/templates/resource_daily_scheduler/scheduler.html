@@ -27,6 +27,7 @@
 </style>
 <script>
     var isAdmin = {{is_admin}};
+    var eventColors = {{event_colors|safe}};
 </script>
 {% endblock %}
 
@@ -95,11 +96,12 @@ resourceColumns_no: [
 {% endblock %}
 
 {% block content_foot %}
-<span class="legend" style="background-color:{{color_for_need_approval_from_others}}">Need other people's approval</span>
-<span class="legend" style="background-color:{{color_for_approved}}">Approved</span>
-<span class="legend" style="background-color:{{color_for_ongoing}}">Ongoing</span>
-<span class="legend" style="background-color:{{color_for_need_your_approval}}">Need your approval</span>
-<!--<div id=""></div>-->
+<!--<span class="legend" style="background-color:{{color_for_need_approval_from_others}}">Need other people's approval</span>-->
+<!--<span class="legend" style="background-color:{{color_for_approved}}">Approved</span>-->
+<!--<span class="legend" style="background-color:{{color_for_ongoing}}">Ongoing</span>-->
+<!--<span class="legend" style="background-color:{{color_for_need_your_approval}}">Need your approval</span>-->
+
+<div id="legendArea"></div>
 {% endblock %}
 {% block event_source %}
 '{{get_schedule}}'

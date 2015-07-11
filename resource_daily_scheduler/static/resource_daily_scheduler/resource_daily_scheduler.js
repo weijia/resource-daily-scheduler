@@ -134,8 +134,11 @@ $(function() { // document ready
             alert("Update error, please contact admin!")
         }
     });
-
-
+    var legendHtml = "";
+    $.each(eventColors, function(key, value){
+        legendHtml += '<span class="legend" style="background-color:'+value+'">'+key+'</span>';
+    });
+    $("#legendArea").html(legendHtml);
 });
 
 function redirectToUrl(target){
@@ -167,6 +170,15 @@ function onDayClicked(date, jsEvent, view, resourceObj) {
 var dateObjForGettingTimeZoneOffset = new Date();
 var currentTimeZoneOffsetInHours = dateObjForGettingTimeZoneOffset.getTimezoneOffset() / 60;
 
+function isAdminFor(event){
+//    if((event.color=="red")//||(event.color=="blue")
+//    ) return true;
+    if(event.color==eventColors["Waiting for your approval"]||
+        event.color==eventColors["Can be set to ongoing"]
+    )
+    return true;
+}
+
 
 function onEventClick(calEvent, jsEvent, view) {
 
@@ -180,7 +192,8 @@ function onEventClick(calEvent, jsEvent, view) {
 //    $(this).css('border-color', 'red');
 
     var targetEvent = $(this);
-    if(!isApprover()) return;
+//    if(!isApprover()) return;
+    if(!isAdminFor(calEvent)) return;
 
     if(!isDialogSupported()){
         redirectToUrl('req_update/'+calEvent.id +'/');
