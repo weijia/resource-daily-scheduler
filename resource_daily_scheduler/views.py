@@ -27,7 +27,7 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
     template_name = "resource_daily_scheduler/scheduler.html"
     bookable_resource_class = BookableResource
     get_schedule_url_name = 'get_schedule'
-    resource_permission_id = "resource_daily_scheduler.change_bookingrequest"
+    resource_permission_id = "resource_daily_scheduler.change_bookableresource"
     resource_detail = "update_resource/"
     # resource_create_view_class = BookableResourceCreateView
     request_create_view = AjaxableBookingRequestCreateView
