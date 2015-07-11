@@ -90,3 +90,12 @@ class AjaxableBookingRequestUpdateView(AjaxableResponseMixin, AjaxableFormContex
             candidate.save()
         response = super(AjaxableBookingRequestUpdateView, self).form_valid(form)
         return response
+
+
+class ApproverUpdater(object):
+    def form_valid(self, form):
+        candidate = form.save(commit=False)
+        candidate.approver = self.request.user
+        candidate.save()
+        response = super(ApproverUpdater, self).form_valid(form)
+        return response
