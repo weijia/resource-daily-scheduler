@@ -3,12 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.simple import redirect_to
 from djangoautoconf.class_based_views.create_view_factory import create_ajaxable_view_from_model
 from resource_daily_scheduler.booking_req_views import AjaxableBookingRequestCreateView, \
-    AjaxableBookingRequestUpdateView
+    AjaxableBookingRequestUpdateView, GetScheduleView, ApproveRequestView
 from resource_daily_scheduler.jquery_gantt_views import ResourceScheduleGanttView
 from resource_daily_scheduler.models import BookableResource, BookingRequest
 from resource_daily_scheduler.resource_views import ResourceAjaxMixin, ResourceViewFactory
-from resource_daily_scheduler.views import ResourceScheduleTemplateView, \
-    GetScheduleView, ApproveRequestView
+from resource_daily_scheduler.views import ResourceScheduleTemplateView
 from towel.modelview import ModelView
 
 resource_views = ModelView(BookableResource)

@@ -1,12 +1,11 @@
-from django.forms import ModelForm
-from django.views.generic import CreateView, UpdateView, FormView
-from djangoautoconf.class_based_views.ajax_views import AjaxableResponseMixin, TowelTemplateMixin
-from djangoautoconf.class_based_views.create_view_factory import create_ajaxable_view_from_model, \
-    AjaxableFormContextUpdateMixin
+# from django.forms import ModelForm
+# from django.views.generic import CreateView, UpdateView, FormView
+from djangoautoconf.class_based_views.ajax_views import AjaxableResponseMixin
+from djangoautoconf.class_based_views.create_view_factory import AjaxableFormContextUpdateMixin
 from djangoautoconf.class_based_views.form_factory import ModelFormFactory
 from djangoautoconf.class_based_views.template_view_factory import TemplateViewFactory, force_list
-from resource_daily_scheduler.booking_req_views import ApproverUpdater
-from resource_daily_scheduler.models import BookableResource
+from resource_daily_scheduler.booking_req_views import ResourceApproverUpdater
+# from resource_daily_scheduler.models import BookableResource
 
 __author__ = 'weijia'
 
@@ -64,7 +63,7 @@ class ResourceViewFactory(object):
     def get_template_view_factory(self):
         f = TemplateViewFactory()
         f.set_exclude(["approver"])
-        f.add_parent_class([AjaxableFormContextUpdateMixin, ApproverUpdater, ])
+        f.add_parent_class([AjaxableFormContextUpdateMixin, ResourceApproverUpdater, ])
         f.set_model_class(self.__base_resource_model_class)
         model_factory = ModelFormFactory(self.__base_resource_model_class)
         model_factory.set_exclude(["approver"])

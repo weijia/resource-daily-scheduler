@@ -1,26 +1,11 @@
 import json
-import datetime
 from django.core.urlresolvers import reverse
-from django.db.models import Q
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, CreateView, View
-import pytz
-# from djangoautoconf.class_based_views.create_view_factory import get_ajax_create_view_from_model
+from django.views.generic import TemplateView
 from djangoautoconf.class_based_views.form_factory import ModelFormFactory
-from djangoautoconf.django_utils import retrieve_param
-from resource_daily_scheduler.booking_req_views import AjaxableBookingRequestCreateView
-from resource_daily_scheduler.models import BookableResource, BookingRequest, get_timezone_aware_datetime_from_date_str
-# from resource_daily_scheduler.resource_views import BookableResourceCreateView, ModelFormFactory
+from resource_daily_scheduler.booking_req_views import AjaxableBookingRequestCreateView, ColorSchema
+from resource_daily_scheduler.models import BookableResource
 
 __author__ = 'weijia'
-
-
-class ColorSchema(object):
-    WAITING_FOR_YOUR_APPROVAL_COLOR = "red"
-    WAITING_FOR_APPROVAL_FROM_OTHERS_COLOR = "gray"
-    APPROVED_COLOR = "blue"
-    ONGOING_COLOR = "green"
 
 
 class ResourceScheduleTemplateView(TemplateView, ColorSchema):
@@ -58,45 +43,3 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
         if self.request.user.has_perm(self.resource_permission_id):
             default_context["is_admin"] = "true"
         return default_context
-
-
-class GetScheduleView(View, ColorSchema):
-    booking_request_class = BookingRequest
-
-    def get(self, request, *args, **kwargs):
-        data = retrieve_param(request)
-        tz = pytz.timezone("Asia/Shanghai")
-        start = get_timezone_aware_datetime_from_date_str(data["start"])
-        end = get_timezone_aware_datetime_from_date_str(data["end"])
-        start_query = Q(end__lt=start)
-        end_query = Q(start__gt=end)
-        res_query = self.booking_request_class.objects.filter(~(end_query | start_query))
-        res = []
-        for event in res_query:
-            color = self.WAITING_FOR_APPROVAL_FROM_OTHERS_COLOR
-            if event.is_approved:
-                color = self.APPROVED_COLOR
-            elif self.request.user.has_perm("change_bookableresource", event.resource):
-                color = self.WAITING_FOR_YOUR_APPROVAL_COLOR
-            if event.is_ongoing:
-                color = self.ONGOING_COLOR
-            res.append({"id": "%d" % event.pk, "resourceId": "%d" % event.resource.pk, "start": str(event.start),
-                        "end": str(event.end), "title": event.project, "color": color})
-        return HttpResponse(json.dumps(res), content_type="application/json")
-
-
-class ApproveRequestView(View):
-    booking_request_class = BookingRequest
-
-    def get(self, request, *args, **kwargs):
-        data = retrieve_param(request)
-        req_id = data["requestId"]
-        r = self.booking_request_class.objects.get(pk=int(req_id))
-        if r.is_approved:
-            r.is_approved = False
-            result = "false"
-        else:
-            r.is_approved = True
-            result = "true"
-        r.save()
-        return HttpResponse(json.dumps({"result": result}), content_type="application/json")
