@@ -47,7 +47,7 @@ var gTodoLegend = ["Waiting for your approval", "Approved, you can change"//, "O
 
 function isTodoItem(legendText){
     for(var index in gTodoLegend){
-            if(key==gTodoLegend[index])
+            if(legendText==gTodoLegend[index])
                 return true
     }
     return false;
