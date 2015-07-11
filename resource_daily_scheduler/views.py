@@ -7,10 +7,11 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, CreateView, View
 import pytz
 # from djangoautoconf.class_based_views.create_view_factory import get_ajax_create_view_from_model
+from djangoautoconf.class_based_views.form_factory import ModelFormFactory
 from djangoautoconf.django_utils import retrieve_param
 from resource_daily_scheduler.booking_req_views import AjaxableBookingRequestCreateView
 from resource_daily_scheduler.models import BookableResource, BookingRequest, get_timezone_aware_datetime_from_date_str
-from resource_daily_scheduler.resource_views import BookableResourceCreateView
+# from resource_daily_scheduler.resource_views import BookableResourceCreateView, ModelFormFactory
 
 __author__ = 'weijia'
 
@@ -28,7 +29,7 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
     get_schedule_url_name = 'get_schedule'
     resource_permission_id = "resource_daily_scheduler.change_bookingrequest"
     resource_detail = "update_resource/"
-    resource_create_view_class = BookableResourceCreateView
+    # resource_create_view_class = BookableResourceCreateView
     request_create_view = AjaxableBookingRequestCreateView
 
     def get_context_data(self, **kwargs):
@@ -41,7 +42,10 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
         default_context["resource_type"] = 'Test'
         default_context["get_schedule"] = reverse(self.get_schedule_url_name)
 
-        default_context["new_resource_form"] = self.resource_create_view_class().get_form_class()
+        # default_context["new_resource_form"] = self.resource_create_view_class().get_form_class()
+        form_factory = ModelFormFactory(self.bookable_resource_class)
+        form_factory.set_exclude("approver")
+        default_context["new_resource_form"] = form_factory.get_form_class()()
 
         default_context["booking_req_form"] = self.request_create_view().get_form_class()
         default_context["is_admin"] = "false"
@@ -72,10 +76,10 @@ class GetScheduleView(View, ColorSchema):
             color = self.WAITING_FOR_APPROVAL_FROM_OTHERS_COLOR
             if event.is_approved:
                 color = self.APPROVED_COLOR
+            elif self.request.user.has_perm("change_bookableresource", event.resource):
+                color = self.WAITING_FOR_YOUR_APPROVAL_COLOR
             if event.is_ongoing:
                 color = self.ONGOING_COLOR
-            if self.request.user.has_perm("change_bookableresource", event.resource):
-                color = self.WAITING_FOR_YOUR_APPROVAL_COLOR
             res.append({"id": "%d" % event.pk, "resourceId": "%d" % event.resource.pk, "start": str(event.start),
                         "end": str(event.end), "title": event.project, "color": color})
         return HttpResponse(json.dumps(res), content_type="application/json")

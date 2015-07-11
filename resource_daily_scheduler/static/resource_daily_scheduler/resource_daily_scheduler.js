@@ -110,7 +110,14 @@ $(function() { // document ready
     $('#bookingReqEditForm').ajaxForm({
         success: function(data){
             if(data.pk){
+//                $("#id_update-end").datepicker("hide");
+//                $("#id_update-start").datepicker("hide");
+//                $('#ui-datepicker-div').hide();
+//                $("#id_update-start").blur();
+//                $("#id_update-end").blur();
+//                $("id_project").focus();
                 $( "#bookingReqEditDialog" ).dialog("close");
+//                $('#ui-datepicker-div').hide();
     //            $('#calendar').fullCalendar(
     //                        'addResource',
     //                        { title: data.title },
@@ -152,6 +159,7 @@ function onDayClicked(date, jsEvent, view, resourceObj) {
         return;
     }
     $( "#newBookingReqDialog" ).dialog("open");
+    $("#id_end").datepicker( "option", "minDate", $("#id_start").datepicker( "getDate" ) );
     $("#id_end").focus();
     $("#id_resource").val(resourceObj.id);
 }
@@ -183,6 +191,9 @@ function onEventClick(calEvent, jsEvent, view) {
 //        $( "#bookingReqEditDialog" ).dialog({"width": "800px"});
         $("#id_update-start").datepicker();
         $("#id_update-end").datepicker();
+
+        $("#id_update-end").datepicker( "option", "minDate", $("#id_update-start").datepicker( "getDate" ) );
+
         $("#bookingReqEditForm").attr("action", 'req_update/'+calEvent.id +'/');
         $( "#bookingReqEditDialog" ).dialog("open");
     });

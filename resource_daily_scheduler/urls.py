@@ -6,7 +6,7 @@ from resource_daily_scheduler.booking_req_views import AjaxableBookingRequestCre
     AjaxableBookingRequestUpdateView
 from resource_daily_scheduler.jquery_gantt_views import ResourceScheduleGanttView
 from resource_daily_scheduler.models import BookableResource, BookingRequest
-from resource_daily_scheduler.resource_views import ResourceAjaxMixin
+from resource_daily_scheduler.resource_views import ResourceAjaxMixin, ResourceViewFactory
 from resource_daily_scheduler.views import ResourceScheduleTemplateView, \
     GetScheduleView, ApproveRequestView
 from towel.modelview import ModelView
@@ -31,11 +31,11 @@ urlpatterns = patterns(
     url(r'^approve_request/', ApproveRequestView.as_view(), name="approve_request"),
 
     url(r'^create_resource/',
-        create_ajaxable_view_from_model(BookableResource, "Create", ResourceAjaxMixin).as_view(success_url="../"),
+        ResourceViewFactory(BookableResource).get_create_view_class().as_view(success_url="../"),
         name="create_resource"),
 
     url(r'^update_resource/(?P<pk>[0-9]+)/$',
-        create_ajaxable_view_from_model(BookableResource, "Update").as_view(success_url="../"),
+        ResourceViewFactory(BookableResource).get_update_view_class().as_view(success_url="../"),
         name="update_resource"),
     # Used for returning from the above
     url(r'^update_resource/$', redirect_to, {'url': '../'}),

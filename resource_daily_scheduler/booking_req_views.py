@@ -6,6 +6,7 @@ import pytz
 from djangoautoconf.class_based_views.ajax_views import AjaxableResponseMixin, AjaxableViewMixin, TowelTemplateMixin
 from djangoautoconf.class_based_views.create_view_factory import AjaxableFormContextUpdateMixin
 from djangoautoconf.django_utils import retrieve_param
+from guardian.shortcuts import assign_perm
 from resource_daily_scheduler.models import BookingRequest, BookableResource
 
 
@@ -68,7 +69,7 @@ class AjaxableBookingRequestUpdateView(AjaxableResponseMixin, AjaxableFormContex
     ajax_form_id = "bookingReqEditForm"
     template_name = "form_view_base_template.html"
     submit_button_text = "Update"
-    success_url="../"
+    success_url = "../"
 
     def get_form_kwargs(self):
         """
@@ -97,5 +98,6 @@ class ApproverUpdater(object):
         candidate = form.save(commit=False)
         candidate.approver = self.request.user
         candidate.save()
+        assign_perm('change_bookableresource', self.request.user, candidate)
         response = super(ApproverUpdater, self).form_valid(form)
         return response
