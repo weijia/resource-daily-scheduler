@@ -150,7 +150,7 @@ $(function() { // document ready
     var legendHtml = "";
     $.each(eventColors, function(key, value){
         var classAttr = "legend";
-        if(isTodoItem()){
+        if(isTodoItem(key)){
             classAttr += " todo"
         }
         legendHtml += '<span class="'+classAttr+'" style="background-color:'+value+'">'+key+'</span>';
