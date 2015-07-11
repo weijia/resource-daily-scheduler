@@ -41,6 +41,19 @@ function hasCreatePermission(){
     return isAdmin;
 }
 
+var gTodoLegend = ["Waiting for your approval", "Approved, you can change"//, "Ongoing"
+];
+
+
+function isTodoItem(legendText){
+    for(var index in gTodoLegend){
+            if(key==gTodoLegend[index])
+                return true
+    }
+    return false;
+}
+
+
 $(function() { // document ready
     $('.datepicker').datepicker();
 //    $(".fc-time").hide();
@@ -136,7 +149,11 @@ $(function() { // document ready
     });
     var legendHtml = "";
     $.each(eventColors, function(key, value){
-        legendHtml += '<span class="legend" style="background-color:'+value+'">'+key+'</span>';
+        var classAttr = "legend";
+        if(isTodoItem()){
+            classAttr += " todo"
+        }
+        legendHtml += '<span class="'+classAttr+'" style="background-color:'+value+'">'+key+'</span>';
     });
     $("#legendArea").html(legendHtml);
 });
@@ -170,13 +187,15 @@ function onDayClicked(date, jsEvent, view, resourceObj) {
 var dateObjForGettingTimeZoneOffset = new Date();
 var currentTimeZoneOffsetInHours = dateObjForGettingTimeZoneOffset.getTimezoneOffset() / 60;
 
+
 function isAdminFor(event){
 //    if((event.color=="red")//||(event.color=="blue")
 //    ) return true;
-    if(event.color==eventColors["Waiting for your approval"]||
-        event.color==eventColors["Approved, you can change"]
-    )
-    return true;
+    for(var index in gTodoLegend){
+            if(event.color==eventColors[gTodoLegend[index]])
+                return true
+    }
+    return false;
 }
 
 
