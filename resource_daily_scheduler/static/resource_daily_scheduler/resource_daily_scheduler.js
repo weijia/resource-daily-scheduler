@@ -174,7 +174,7 @@ function isAdminFor(event){
 //    if((event.color=="red")//||(event.color=="blue")
 //    ) return true;
     if(event.color==eventColors["Waiting for your approval"]||
-        event.color==eventColors["Can be set to ongoing"]
+        event.color==eventColors["You can set it to ongoing"]
     )
     return true;
 }

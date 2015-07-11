@@ -137,7 +137,7 @@ class ColorSchema(object):
     COLOR_APPROVED = "blue"
     COLOR_ONGOING = "green"
     COLOR_CONFLICT = "black"
-    COLOR_CAN_BE_SET_TO_ONGOING = "DarkSlateGray"
+    COLOR_APPROVED_COMMA_YOU_CAN_SET_IT_TO_ONGOING = "DarkSlateGray"
 
     def get_colors(self):
         colors = {}
@@ -147,7 +147,9 @@ class ColorSchema(object):
             if attr[:6] != "COLOR_":
                 continue
             value = getattr(ColorSchema, attr)
-            attr_name = attr[6:].lower()
+            attr_name = attr[6:]
+            attr_name = attr_name.replace("_COMMA", ",")
+            attr_name = attr_name.lower()
             attr_name = attr_name.replace("_", " ")
             colors[attr_name.capitalize()] = value
         return colors
@@ -192,7 +194,7 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
         has_perm = self.request.user.has_perm("change_bookableresource", event.resource)
         if event.is_approved:
             if has_perm:
-                color = self.COLOR_CAN_BE_SET_TO_ONGOING
+                color = self.COLOR_APPROVED_COMMA_YOU_CAN_SET_IT_TO_ONGOING
             else:
                 color = self.COLOR_APPROVED
         elif has_perm:
