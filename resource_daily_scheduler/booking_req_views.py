@@ -134,10 +134,10 @@ class ResourceApproverUpdater(object):
 class ColorSchema(object):
     COLOR_WAITING_FOR_YOUR_APPROVAL = "red"
     COLOR_WAITING_FOR_APPROVAL_FROM_OTHERS = "gray"
-    COLOR_APPROVED = "blue"
+    COLOR_APPROVED_COMMA_YOU_CANNOT_CHANGE = "blue"
     COLOR_ONGOING = "green"
     COLOR_CONFLICT = "black"
-    COLOR_APPROVED_COMMA_YOU_CAN_SET_IT_TO_ONGOING = "DarkSlateGray"
+    COLOR_APPROVED_COMMA_YOU_CAN_CHANGE = "DeepPink"
 
     def get_colors(self):
         colors = {}
@@ -194,9 +194,9 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
         has_perm = self.request.user.has_perm("change_bookableresource", event.resource)
         if event.is_approved:
             if has_perm:
-                color = self.COLOR_APPROVED_COMMA_YOU_CAN_SET_IT_TO_ONGOING
+                color = self.COLOR_APPROVED_COMMA_YOU_CAN_CHANGE
             else:
-                color = self.COLOR_APPROVED
+                color = self.COLOR_APPROVED_COMMA_YOU_CANNOT_CHANGE
         elif has_perm:
             if self.is_request_can_be_approved(event):
                 color = self.COLOR_WAITING_FOR_YOUR_APPROVAL
