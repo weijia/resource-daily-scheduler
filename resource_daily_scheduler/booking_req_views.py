@@ -168,6 +168,7 @@ class ColorSchema(object):
 
 class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
     model = BookingRequest
+    resource_approval_permission = "change_bookableresource"
     # color_schema = {"Waiting for your approval": "red",
     #                 "Waiting for approval from others": "gray",
     #                 "Approved": "blue",
@@ -197,7 +198,7 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
 
     def get_color(self, event):
         color = self.COLOR_WAITING_FOR_APPROVAL_FROM_OTHERS
-        has_perm = self.request.user.has_perm("change_bookableresource", event.resource)
+        has_perm = self.request.user.has_perm(self.resource_approval_permission, event.resource)
         if event.is_approved:
             if has_perm:
                 color = self.COLOR_APPROVED_COMMA_YOU_CAN_CHANGE
