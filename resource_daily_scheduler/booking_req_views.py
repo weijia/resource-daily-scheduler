@@ -120,11 +120,13 @@ class AjaxableBookingRequestUpdateView(AjaxableResponseMixin, AjaxableFormContex
 
 
 class ResourceApproverUpdater(object):
+    create_resource_permission = 'change_bookableresource'
+
     def form_valid(self, form):
         candidate = form.save(commit=False)
         candidate.approver = self.request.user
         candidate.save()
-        assign_perm('change_bookableresource', self.request.user, candidate)
+        assign_perm(self.create_resource_permission, self.request.user, candidate)
         # In ModelFormMixin.form_valid, form.save() and its parent's form_valid will be called
         # And in FormMixin (ModelFormMixin's parent) HttpResponseRedirect(self.get_success_url()) will be called
         response = super(ResourceApproverUpdater, self).form_valid(form)

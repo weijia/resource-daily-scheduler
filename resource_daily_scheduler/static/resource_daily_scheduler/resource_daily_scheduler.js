@@ -153,7 +153,7 @@ $(function() { // document ready
         if(isTodoItem(key)){
             classAttr += " todo"
         }
-        legendHtml += '<span class="'+classAttr+'" style="background-color:'+value+'">'+key+'</span>';
+        legendHtml += '<div class="'+classAttr+'" style="background-color:'+value+'">'+key+'</div>';
     });
     $("#legendArea").html(legendHtml);
 });

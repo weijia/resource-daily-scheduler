@@ -69,3 +69,8 @@ class BookingRequest(BookingRequestBase):
 
 import eav
 eav.register(BookableResource)
+
+
+from south.modelsinspector import add_ignored_fields
+add_ignored_fields(["^eav\.fields\.EavDatatypeField"])
+add_ignored_fields(["^eav\.fields\.EavSlugField"])
