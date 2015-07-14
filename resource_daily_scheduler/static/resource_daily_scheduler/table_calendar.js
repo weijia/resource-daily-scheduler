@@ -16,19 +16,27 @@ $.widget( "resourceScheduler.tableCalendar", {
     _create: function() {
 //        var progress = this.options.value + "%";
 //        this.element.addClass( "progressbar" ).text( progress );
+        console.log(this.options);
+
+
         var start = new Date();
         var year = start.getFullYear();
         var end = new Date();
         end.setYear(year+1);
         // TODO: use a separate table for rows, so we will not get the limitation
         // TODO: on the height setting of the table. Check fullcalendar.
-        this.element.html('<div class="calendarViewPort">'+
-        '<div><table class="calendar"'+
-        '><thead><tr></tr></thead><tr class="content"></tr>'+
-        '<tr class="content"></tr>'+
-        '<tr class="content"></tr>'+
-        '<tr class="lastLine"></tr>'+
-        '</table></div></div>');
+        var tableHeader = '<div class="calendarViewPort">'+
+                            '<div><table class="calendar"'+
+                            '><thead><tr></tr></thead>';
+        var tableBody = '';
+//        for(var index=0; index<this.options.resources.length; index++){
+//            tableBody += '<tr class="content"></tr>';
+//        }
+        var tableFooter = '';//'<tr class="lastLine"></tr>'+
+                            //'</table></div></div>';
+//        var tableElem = this.element;
+//        tableElem.html(tableHeader+tableBody+tableFooter);
+        this.element.html(tableHeader+tableBody+tableFooter);
         var entries = [];
         var contentEntries = [];
         var borderColor = this.options.borderColor;
@@ -42,8 +50,12 @@ $.widget( "resourceScheduler.tableCalendar", {
             contentEntries.push('<td><div></div></td>');
         });
         $("thead > tr", this.element).html('<td>Item title</td>'+entries.join(""));
-        $("tr.content", this.element).html('<td></td>'+contentEntries.join(""));
-        $("tr.lastLine", this.element).html('<td></td>'+contentEntries.join(""));
+        var tableElem = $("table.calendar", tableElem);
+        $.each(this.options.resources, function( index, value ){
+            tableElem.append('<tr><td resourceId="'+value.id+'">'+value.title+'</td>'+
+            contentEntries.join("")+'</tr>');
+        });
+        $("tr.lastLine", this.element).html('<td><div></div></td>'+contentEntries.join(""));
     },
     // Return an array of Date objects between `from` and `to`
     getDays: function (from, to) {

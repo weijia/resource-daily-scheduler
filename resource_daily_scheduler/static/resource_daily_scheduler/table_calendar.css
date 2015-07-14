@@ -1,7 +1,7 @@
 table.calendar {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;}
 table.calendar tr {height:40px}
 table.calendar thead {background-color:#F6F6F6}
-table.calendar .weekend {color: #939496}
+table.calendar .weekend {color: #939496;background-color:yellow}
 table.calendar td {border:solid 1px #DDD}
 table.calendar tr td  div {width:25px;}
 div.calendarViewPort {width:900px;overflow-x: auto;height:600px;border-color: #DDD; border-style: solid;}

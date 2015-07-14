@@ -7,6 +7,7 @@ from resource_daily_scheduler.booking_req_views import AjaxableBookingRequestCre
 from resource_daily_scheduler.jquery_gantt_views import ResourceScheduleGanttView
 from resource_daily_scheduler.models import BookableResource, BookingRequest
 from resource_daily_scheduler.resource_views import ResourceAjaxMixin, ResourceViewFactory
+from resource_daily_scheduler.table_scheduler import ResourceTableScheduler
 from resource_daily_scheduler.views import ResourceScheduleTemplateView
 from towel.modelview import ModelView
 
@@ -25,6 +26,7 @@ urlpatterns = patterns(
     url(r'^$', login_required(ResourceScheduleTemplateView.as_view()), name="resource_scheduler"),
     url(r'^jquery_gantt$', login_required(ResourceScheduleGanttView.as_view()), name="resource_scheduler_jquery_gantt"),
     url(r'^jquery_gantt$', login_required(ResourceScheduleGanttView.as_view()), name="resource_scheduler_jquery_gantt"),
+    url(r'^table_schedule', login_required(ResourceTableScheduler.as_view()), name="resource_scheduler_jquery_gantt"),
 
     url(r'^get_schedule/', GetScheduleView.as_view(), name="get_schedule"),
     url(r'^approve_request/', ApproveRequestView.as_view(), name="approve_request"),

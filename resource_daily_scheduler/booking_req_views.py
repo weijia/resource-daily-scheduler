@@ -72,7 +72,7 @@ class RequestApprovalMixin(object):
             end__gte=approval_request.start,
             resource=approval_request.resource,
         )
-        conflicts_filter = conflicts.filter(~Q(id=approval_request.pk)&(Q(is_approved=True)|Q(is_ongoing=True)))
+        conflicts_filter = conflicts.filter(~Q(id=approval_request.pk) & (Q(is_approved=True) | Q(is_ongoing=True)))
         # if any(conflicts_filter):
         #     return False
         for i in conflicts_filter:
@@ -140,6 +140,7 @@ class ColorSchema(object):
     COLOR_ONGOING = "green"
     COLOR_CONFLICT = "black"
     COLOR_APPROVED_COMMA_YOU_CAN_CHANGE = "DeepPink"
+    COLOR_COMPLETED = "aqua"
 
     def get_colors(self):
         colors = {}
@@ -189,7 +190,7 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
         for event in res_query:
             color = self.get_color(event)
             event = {"id": "%d" % event.pk, "resourceId": "%d" % event.resource.pk, "start": str(event.start),
-                      "end": str(event.end), "title": event.project, "color": color}
+                     "end": str(event.end), "title": event.project, "color": color}
             if color in [self.COLOR_WAITING_FOR_YOUR_APPROVAL,  # self.COLOR_ONGOING,
                          self.COLOR_APPROVED_COMMA_YOU_CAN_CHANGE]:
                 event["className"] = "todo"
@@ -210,7 +211,12 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
             else:
                 color = self.COLOR_CONFLICT
         if event.is_ongoing:
-            color = self.COLOR_ONGOING
+            tz = pytz.timezone("Asia/Shanghai")
+            end_datetime = event.end
+            if event.end < end_datetime.astimezone(tz):
+                color = self.COLOR_ONGOING
+            else:
+                color = self.COLOR_COMPLETED
         return color
 
 
