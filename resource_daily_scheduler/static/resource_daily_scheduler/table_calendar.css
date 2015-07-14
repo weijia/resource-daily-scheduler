@@ -9,3 +9,37 @@ table.calendar tr td  div {width:25px;}
 div.calendarViewPort {width:900px;overflow-x: auto;height:600px;border-color: #DDD; border-style: solid;}
 .legend {float:left;padding:20px;padding-left:10px;padding-right:10px;color:white;border: solid 3px white;}
 .todo {border: 3px solid; border-color: yellow!important}
+
+
+
+table.rowTable {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;}
+
+table.rowTable thead {background-color:#F6F6F6}
+table.rowTable td {border:solid 1px #CCC}
+table.rowTable thead .resourceNameHeader {width:100px;}
+table.rowTable .resourceName {width:100px;}
+table.rowTable .scrollTd {width:80%;}
+.rowTablePositioningDiv {position:absolute;}/*use absolute here, so the next element for parent div will still in the same start position*/
+.rowTableViewDiv {height:200px;overflow-y:auto}
+.rowTableViewDiv {width:850px;}
+.rowTableViewDiv {position:relative; top:22px;}
+.rowContent {width:400px;}
+
+table.fixedTable {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;border:solid 2px;}
+table thead {background-color:#F6F6F6}
+table td {border:solid 1px #CCC}
+table thead .resourceNameHeader {width:100px;}
+table .resourceName {width:100px;}
+table .scrollTd {width:80%;}
+
+.fixedTableDiv {position:absolute;}
+.fixedTableTdDiv {width:800px;height:600px;}
+
+
+.columnContainer {position:relative;z-index:1;left:103px;top:2px;width:700px;overflow:auto}
+.columnContainerTable {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;}
+.columnContainerTable thead {background-color:#F6F6F6}
+.columnContainerTable tr td  div {width:25px;}
+.columnContainerContent div {height:200px;}
+
+
