@@ -4,9 +4,18 @@
 {% load static %}
 
 {% block extrahead %}
+{{ block.super }}
   <link rel="stylesheet" href="{% static 'resource_daily_scheduler/table_calendar.css'%}">
+  <link rel='stylesheet' type='text/css' href="{% static 'css/jquery-ui/smoothness/jquery-ui.css' %}" />
   <script type='text/javascript' src="{% static 'js/jquery-ui.js' %}"></script>
   <script src="{% static 'resource_daily_scheduler/table_calendar.js'%}"></script>
+  <!--<script src="{% static 'resource_daily_scheduler/resource_daily_scheduler.js' %}"></script>-->
+  <script src='/static/resource_daily_scheduler/csrf.js'></script>
+  <script src="{% static 'resource_daily_scheduler/ajaxsubmit.js' %}"></script>
+<script>
+    var isAdmin = {{is_admin}};
+    var eventColors = {{event_colors|safe}};
+</script>
 <script>
 
 	$(function() { // document ready
@@ -58,4 +67,5 @@
 	<div id='calendar'></div>
 	{% block content_foot %}
 	{% endblock %}
+<script src="{% static 'resource_daily_scheduler/resource_daily_scheduler.js' %}"></script>
 {% endblock %}

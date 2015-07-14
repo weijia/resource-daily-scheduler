@@ -1,39 +1,42 @@
-{% extends "base.html" %}
+{% extends "resource_daily_scheduler/table_scheduler_base.html" %}
 {% load bootstrap %}
 {% load admin_static %}
 {% load static %}
 
 
 {% block resource_list %}
-[
-	{ id: 'a', title: 'Auditorium A' },
-	{ id: 'b', title: 'Auditorium B', eventColor: 'green' },
-	{ id: 'c', title: 'Auditorium C', eventColor: 'orange' },
-	{ id: 'd', title: 'Auditorium D', children: [
-		{ id: 'd1', title: 'Room D1' },
-		{ id: 'd2', title: 'Room D2' }
-	] },
-	{ id: 'e', title: 'Auditorium E' },
-	{ id: 'f', title: 'Auditorium F', eventColor: 'red' },
-	{ id: 'g', title: 'Auditorium G' },
-	{ id: 'h', title: 'Auditorium H' },
-	{ id: 'i', title: 'Auditorium I' },
-	{ id: 'j', title: 'Auditorium J' },
-	{ id: 'k', title: 'Auditorium K' },
-	{ id: 'l', title: 'Auditorium L' },
-	{ id: 'm', title: 'Auditorium M' },
-	{ id: 'n', title: 'Auditorium N' },
-	{ id: 'o', title: 'Auditorium O' },
-	{ id: 'p', title: 'Auditorium P' },
-	{ id: 'q', title: 'Auditorium Q' },
-	{ id: 'r', title: 'Auditorium R' },
-	{ id: 's', title: 'Auditorium S' },
-	{ id: 't', title: 'Auditorium T' },
-	{ id: 'u', title: 'Auditorium U' },
-	{ id: 'v', title: 'Auditorium V' },
-	{ id: 'w', title: 'Auditorium W' },
-	{ id: 'x', title: 'Auditorium X' },
-	{ id: 'y', title: 'Auditorium Y' },
-	{ id: 'z', title: 'Auditorium Z' }
-]
+{{resource_list|safe}}
+{% endblock %}
+
+
+{% block content_header %}
+<!--<button id="addResourceButton">Add resource</button>-->
+<div style="display:none">
+<div id="dialog">
+<form id="newResourceForm" action="create_resource/"
+      method="post" class="form-inline">
+    {% csrf_token %}
+    {{ new_resource_form|bootstrap }}
+    <p>
+        <input id="newResourceFormSubmit" type="submit" value="Submit"/>
+    </p>
+</form>
+</div>
+<div id="dialog-confirm" title="Are you sure to approve the request?">
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are you sure to approve the request?</p>
+</div>
+
+<div id="newBookingReqDialog">
+<form id="newBookingReqForm" action="create_booking_req/"
+      method="post" class="form-inline">
+    {% csrf_token %}
+    {{ booking_req_form|bootstrap }}
+    <p>
+        <input id="newBookingReqFormSubmit" type="submit" value="Submit"/>
+    </p>
+</form>
+</div>
+<div id="bookingReqEditDialog">
+</div>
+</div>
 {% endblock %}

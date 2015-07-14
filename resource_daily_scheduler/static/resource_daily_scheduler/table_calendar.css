@@ -1,8 +1,10 @@
 table.calendar {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;}
 table.calendar tr {height:40px}
 table.calendar thead {background-color:#F6F6F6}
-table.calendar .weekend {color: #939496;background-color:yellow}
-table.calendar td {border:solid 1px #DDD}
+table.calendar thead .resourceNameHeader {width:100px;}
+table.calendar .weekend {color: #939496;background-color:#DDD;}
+table.calendar .weekendInContent {background-color: #DDD;}
+table.calendar td {border:solid 1px #CCC}
 table.calendar tr td  div {width:25px;}
 div.calendarViewPort {width:900px;overflow-x: auto;height:600px;border-color: #DDD; border-style: solid;}
 .legend {float:left;padding:20px;padding-left:10px;padding-right:10px;color:white;border: solid 3px white;}

@@ -33,7 +33,6 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
         default_context["new_resource_form"] = form_factory.get_form_class()()
 
         default_context["booking_req_form"] = self.request_create_view().get_form_class()
-        default_context["is_admin"] = "false"
         default_context["resource_detail"] = self.resource_detail
         # default_context["color_for_need_approval_from_others"] = self.WAITING_FOR_APPROVAL_FROM_OTHERS_COLOR
         # default_context["color_for_approved"] = self.APPROVED_COLOR
@@ -41,6 +40,7 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
         # default_context["color_for_need_your_approval"] = self.WAITING_FOR_YOUR_APPROVAL_COLOR
         default_context["event_colors"] = json.dumps(self.get_colors())
 
+        default_context["is_admin"] = "false"
         if self.request.user.has_perm(self.resource_permission_id):
             default_context["is_admin"] = "true"
         return default_context
