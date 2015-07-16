@@ -28,7 +28,7 @@ $.widget( "resourceScheduler.tableCalendar", {
                                 '<div class="topTableDiv">'+
                                     '<table class="topTable">'+
                                         '<tr>' +
-                                            '<td id="firstTd">' +
+                                            '<td class="firstTd">' +
                                             '</td>' +
                                             '<td>' +
                                                 '<div class="divHeader" style="overflow:hidden;width:284px;">' +
@@ -42,7 +42,7 @@ $.widget( "resourceScheduler.tableCalendar", {
                                             '<td valign="top">' +
                                                 '<div class="firstCol" style="overflow: hidden;height:80px">' +
                                                     '<table width="200px" cellspacing="0" cellpadding="0" border="1" >' +
-                                                        '<!--<tr><td></td></tr>-->' +
+                                                        '<tr><td></td></tr>' +
                                                     '</table>' +
                                                 '<div>' +
                                             '</td>' +
