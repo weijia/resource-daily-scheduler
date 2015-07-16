@@ -12,6 +12,24 @@ $.widget( "resourceScheduler.tableCalendar", {
             return false;
         }
     },
+
+    getFormattedDate: function(date){
+//        return (data.getMonth() + 1) + "-" + data.getDate() + "-" + data.getFullYear()
+        var month = date.getMonth() + 1;
+        prefix = "";
+        if(month < 10) prefix = "0";
+        monthStr = prefix + month
+        var day = date.getDate()
+        prefix = "";
+        if(day < 10) prefix = "0";
+        dayStr = prefix + day
+
+        return date.getFullYear() + "-" + monthStr + "-" + dayStr;
+    },
+
+    getFormattedDateFromDateStr: function(date){
+        return date.split(" ")[0];
+    },
  
     _create: function() {
 //        var progress = this.options.value + "%";
@@ -70,6 +88,7 @@ $.widget( "resourceScheduler.tableCalendar", {
         var contentEntries = [];
         var borderColor = this.options.borderColor;
         var isWeekEnd = this.isWeekEnd;
+        var thisValue = this;
 //        var columnContainerTable = $(".columnContainerTable", this.element);
         $.each(this.getDays(start, end), function( index, value ) {
             var tdClass="";
@@ -78,7 +97,7 @@ $.widget( "resourceScheduler.tableCalendar", {
                 tdClass=' class="weekend"';
                 tdContentClass=' class="weekendInContent"';
             }
-            entries.push('<td'+tdClass+'><div>'+value.getDate()+"</div></td>");
+            entries.push('<td'+tdClass+' date="'+thisValue.getFormattedDate(value)+'"><div>'+value.getDate()+"</div></td>");
             contentEntries.push('<td><div></div></td>');
         });
         $(".divHeader tr", this.element).html(entries.join(""));
@@ -96,11 +115,40 @@ $.widget( "resourceScheduler.tableCalendar", {
             $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/"></a>');
         });
 
+        
+
         $.get(getSchedule+"?start=2015-07-01&end=2015-08-01&_=1437058938623", function(result){
             //$("div").html(result);
             console.log(result);
+            $.each($(result), function(index, value){
+//                $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/"></a>');
+                thisValue.addEvent(value);
+            });
         });
 
+    },
+    getResourceTop: function(resourceId){
+        var selectorStr = ".resourceName[resourceId="+resourceId+"]";
+        var elem = $(selectorStr);
+        if(elem.length){
+            var top = elem.offset().top - elem.parent().parent().offset().top;
+            return top;
+        }
+        return null;
+    },
+    getDateLeft: function(eventStartDateStr){
+        var eventStartDate = this.getFormattedDateFromDateStr(eventStartDateStr);
+        var eventDateTd = $(".headerTable td[date="+eventStartDate+"]");
+        var left = eventDateTd.offset().left - eventDateTd.parent().parent().offset().left;
+        return left;
+    },
+    addEvent: function(event){
+        var top = this.getResourceTop(event.resourceId);
+        if(top){
+            var width = this.getDateLeft(event.end) + 20;
+            $(".tableDiv").append('<div class="event" style="top:'+top+'px;left:'+
+            this.getDateLeft(event.start)+'px;width:'+width+'px;background-color:'+event.color+'">'+'</div>');
+        }
     },
     // Return an array of Date objects between `from` and `to`
     getDays: function (from, to) {

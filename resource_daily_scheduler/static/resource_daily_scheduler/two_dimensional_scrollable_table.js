@@ -57,6 +57,6 @@ fnAdjustTable = function(){
 //function to support scrolling of title and first column
 fnScroll = function(){
   $('.divHeader').scrollLeft($('.tableDiv').scrollLeft());
-  console.log($('.divHeader').scrollLeft(), $('.tableDiv').scrollLeft())
+//  console.log($('.divHeader').scrollLeft(), $('.tableDiv').scrollLeft())
   $('.firstCol').scrollTop($('.tableDiv').scrollTop());
 };
