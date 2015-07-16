@@ -64,18 +64,6 @@ $.widget( "resourceScheduler.tableCalendar", {
                                 '</div>' +
                             '</div>'
 
-
-//                            +'<div class="calendarViewPort">'+
-//                            '<div><table class="calendar"'+
-//                            '><thead><tr></tr></thead>';
-//        var tableBody = '';
-////        for(var index=0; index<this.options.resources.length; index++){
-////            tableBody += '<tr class="content"></tr>';
-////        }
-//        var tableFooter = '';//'<tr class="lastLine"></tr>'+
-//                            //'</table></div></div>';
-////        var tableElem = this.element;
-////        tableElem.html(tableHeader+tableBody+tableFooter);
         this.element.html(tableHeader//+tableBody+tableFooter
         );
         var entries = [];
@@ -90,22 +78,16 @@ $.widget( "resourceScheduler.tableCalendar", {
                 tdClass=' class="weekend"';
                 tdContentClass=' class="weekendInContent"';
             }
-//            columnContainerTable.append('<td'+tdClass+'><div>'+value.getDate()+"</div></td>");
             entries.push('<td'+tdClass+'><div>'+value.getDate()+"</div></td>");
-//            contentEntries.push('<td'+tdContentClass+'><div></div></td>');
             contentEntries.push('<td><div></div></td>');
         });
         $(".divHeader tr", this.element).html(entries.join(""));
-//        $(".columnContainerContent", columnContainerTable).html(contentEntries.join(""));
-//        $("thead > tr", this.element).html('<td><div class="resourceNameHeader">Item title</div></td>'
-//            //`+entries.join("")
-//        );
+
         var tableElem = $(".firstCol table", this.element);
         var contentTable = $(".tableDiv table", this.element);
         $.each(this.options.resources, function( index, value ){
             tableElem.append('<tr><td resourceId="'+value.id+'" class="resourceName"><div>'+
                 value.title+'</div></td><td><div class="rowContent"></div></td>'
-            //+ contentEntries.join("")+'</tr>'
             );
             contentTable.append("<tr>"+contentEntries.join("")+'</tr>');
         });
@@ -119,9 +101,6 @@ $.widget( "resourceScheduler.tableCalendar", {
             console.log(result);
         });
 
-
-////        $("tr.lastLine", this.element).html('<td><div></div></td>'+contentEntries.join(""));
-//        tableElem.append('<tr><td class="resourceName"></td><td></td>');
     },
     // Return an array of Date objects between `from` and `to`
     getDays: function (from, to) {
