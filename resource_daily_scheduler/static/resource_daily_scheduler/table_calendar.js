@@ -25,21 +25,39 @@ $.widget( "resourceScheduler.tableCalendar", {
         // TODO: on the height setting of the table. Check fullcalendar.
         var tableHeader = '<div class="fc-toolbar"><div class="fc-left"></div></div>'+
                             '<div>'+
-                                '<div class="fixedTableDiv">'+
-                                    '<table class="fixedTable">'+
-                                        '<thead><tr><td><div class="resourceNameHeader">Item title'+
-                                        '</div></td><td><div class="fixedTableHeaderTd"></div></td></tr></thead>' +
-                                        '<tr><td></td><td><div class="fixedTableTdDiv"></div></td></tr>' +
+                                '<div class="topTableDiv">'+
+                                    '<table class="topTable">'+
+                                        '<tr>' +
+                                            '<td id="firstTd">' +
+                                            '</td>' +
+                                            '<td>' +
+                                                '<div class="divHeader" style="overflow:hidden;width:284px;">' +
+                                                    '<table>' +
+                                                    '<tr><!--<td></td>--></tr>' +
+                                                    '</table>'
+                                                '</div>' +
+                                            '</td>' +
+                                        '</tr>' +
+                                        '<tr>' +
+                                            '<td valign="top">' +
+                                                '<div class="firstCol" style="overflow: hidden;height:80px">' +
+                                                    '<table width="200px" cellspacing="0" cellpadding="0" border="1" >' +
+                                                        '<!--<tr><td></td></tr>-->' +
+                                                    '</table>' +
+                                                '<div>' +
+                                            '</td>' +
+                                            '<td valign="top">' +
+                                                '<div class="tableDiv" style="overflow: scroll;width:300px;height:100px;position:relative" onscroll="fnScroll()" >' +
+                                                    '<table width="500px" cellspacing="0" cellpadding="0" border="1" >' +
+                                                        '<tr id="firstTr">' +
+                                                            '<td></td>' +
+                                                        '</tr>' +
+                                                    '</table>' +
+                                                '</div>' +
+                                            '</td>' +
+                                        '</tr>' +
                                     '</table>'+
                                 '</div>' +
-                                '<div class="rowTablePositioningDiv"><div class="rowTableViewDiv">'+
-                                    '<table class="rowTable">'+
-                                    '</table>'+
-                                '</div></div>' +
-                                '<div class="columnContainer"><table class="columnContainerTable">'+
-                                    '<thead><tr></tr></thead>'+
-                                    '<tr class="columnContainerContent"></tr>'+
-                                '</table></div>' +
                             '</div>'
 
 
@@ -60,7 +78,7 @@ $.widget( "resourceScheduler.tableCalendar", {
         var contentEntries = [];
         var borderColor = this.options.borderColor;
         var isWeekEnd = this.isWeekEnd;
-        var columnContainerTable = $(".columnContainerTable", this.element);
+//        var columnContainerTable = $(".columnContainerTable", this.element);
         $.each(this.getDays(start, end), function( index, value ) {
             var tdClass="";
             var tdContentClass = "";
@@ -73,15 +91,12 @@ $.widget( "resourceScheduler.tableCalendar", {
 //            contentEntries.push('<td'+tdContentClass+'><div></div></td>');
             contentEntries.push('<td><div></div></td>');
         });
-        $("thead tr", columnContainerTable).html(entries.join(""));
-        $(".columnContainerContent", columnContainerTable).html(contentEntries.join(""));
-
-
-
+        $(".divHeader tr", this.element).html(entries.join(""));
+//        $(".columnContainerContent", columnContainerTable).html(contentEntries.join(""));
 //        $("thead > tr", this.element).html('<td><div class="resourceNameHeader">Item title</div></td>'
 //            //`+entries.join("")
 //        );
-        var tableElem = $("table.rowTable", this.element);
+        var tableElem = $(".firstCol table", this.element);
         $.each(this.options.resources, function( index, value ){
             tableElem.append('<tr><td resourceId="'+value.id+'" class="resourceName">'+
                 value.title+'</td><td><div class="rowContent"></div></td>'
@@ -89,7 +104,7 @@ $.widget( "resourceScheduler.tableCalendar", {
             );
         });
 ////        $("tr.lastLine", this.element).html('<td><div></div></td>'+contentEntries.join(""));
-        tableElem.append('<tr><td class="resourceName"></td><td></td>');
+//        tableElem.append('<tr><td class="resourceName"></td><td></td>');
     },
     // Return an array of Date objects between `from` and `to`
     getDays: function (from, to) {
