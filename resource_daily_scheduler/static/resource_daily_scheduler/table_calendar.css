@@ -43,20 +43,28 @@ table .scrollTd {width:80%;}
 .columnContainerContent div {height:200px;}
 
 */
-.tableDiv {overflow: scroll;width:600px;height:500px;position:relative}/*right hand part width*/
+.tableDiv {width:700px;}
+.divHeader {width:700px;}
+
+.tableDiv {height:300px;}
+.firstCol {height:300px}/*Container for the first column*/
+
+.tableDiv {overflow:scroll;position:relative}/*right hand part width*/
+.divHeader {overflow:hidden;}/*right hand part width*/
 .headerTable {border:solid 1px #CCC}
 
 .headerTable div {height:50;width:50px;}
 .dataTable {width:300px;cellspacing:0;cellpadding:0;}
 .firstColumnTable {width:100px}
-.divHeader {overflow:hidden;width:600px;}/*right hand part width*/
+
 /*table td {border:solid 1px #CCC}*/
-.firstCol {overflow:hidden;height:500px}/*Container for the first column*/
+.firstCol {overflow:hidden;}/*Container for the first column*/
+
 
 .topTable {border:solid 1px #CCC}
 table td {border:solid 1px #CCC}
 .dataTable {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;}
 /*.firstCol table {border:solid 1px #CCC}*/
 
-.tableDiv div {height:20px;width:50px;}
+.tableDiv div {height:20px;width:20px;}
 .firstCol div {height:20px;}
