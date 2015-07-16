@@ -34,7 +34,7 @@ $.widget( "resourceScheduler.tableCalendar", {
                                                 '<div class="divHeader" style="overflow:hidden;width:284px;">' +
                                                     '<table>' +
                                                     '<tr><!--<td></td>--></tr>' +
-                                                    '</table>'
+                                                    '</table>' +
                                                 '</div>' +
                                             '</td>' +
                                         '</tr>' +
@@ -97,11 +97,13 @@ $.widget( "resourceScheduler.tableCalendar", {
 //            //`+entries.join("")
 //        );
         var tableElem = $(".firstCol table", this.element);
+        var contentTable = $(".tableDiv table", this.element);
         $.each(this.options.resources, function( index, value ){
             tableElem.append('<tr><td resourceId="'+value.id+'" class="resourceName">'+
                 value.title+'</td><td><div class="rowContent"></div></td>'
             //+ contentEntries.join("")+'</tr>'
             );
+            contentTable.append("<tr>"+contentEntries.join("")+'</tr>');
         });
 ////        $("tr.lastLine", this.element).html('<td><div></div></td>'+contentEntries.join(""));
 //        tableElem.append('<tr><td class="resourceName"></td><td></td>');
