@@ -98,7 +98,7 @@ $.widget( "resourceScheduler.tableCalendar", {
                 tdContentClass=' class="weekendInContent"';
             }
             entries.push('<td'+tdClass+' date="'+thisValue.getFormattedDate(value)+'"><div>'+value.getDate()+"</div></td>");
-            contentEntries.push('<td><div></div></td>');
+            contentEntries.push('<td'+tdClass+'><div></div></td>');
         });
         $(".divHeader tr", this.element).html(entries.join(""));
 
@@ -128,6 +128,16 @@ $.widget( "resourceScheduler.tableCalendar", {
                 thisValue.addEvent(value);
             });
         });
+        $(".event").click(function(a, b, c){
+            console.log(a, b, c);
+            onEventClick();
+        });
+
+        $(".dataTable").on("click", "td", function(a, b, c){
+            console.log(a, b, c);
+            onDayClicked();
+        });
+
 
     },
     getResourceTop: function(resourceId){
