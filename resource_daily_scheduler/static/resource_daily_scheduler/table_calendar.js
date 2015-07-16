@@ -17,10 +17,14 @@ $.widget( "resourceScheduler.tableCalendar", {
 //        var progress = this.options.value + "%";
 //        this.element.addClass( "progressbar" ).text( progress );
 //        console.log(this.options);
+        var today = new Date();
+        var startMonth = today.getMonth();
+        //var year = start.getFullYear();
         var start = new Date();
-        var year = start.getFullYear();
+        start.setMonth(startMonth-2);
+        //end.setYear(year+1);
         var end = new Date();
-        end.setYear(year+1);
+        end.setMonth(startMonth+2);
         // TODO: use a separate table for rows, so we will not get the limitation
         // TODO: on the height setting of the table. Check fullcalendar.
         var tableHeader = '<div class="fc-toolbar"><div class="fc-left"></div></div>'+
@@ -105,6 +109,17 @@ $.widget( "resourceScheduler.tableCalendar", {
             );
             contentTable.append("<tr>"+contentEntries.join("")+'</tr>');
         });
+
+        $.each($(".firstCol td"), function(index, value){
+            $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/"></a>');
+        });
+
+        $.get(getSchedule+"?start=2015-07-01&end=2015-08-01&_=1437058938623", function(result){
+            //$("div").html(result);
+            console.log(result);
+        });
+
+
 ////        $("tr.lastLine", this.element).html('<td><div></div></td>'+contentEntries.join(""));
 //        tableElem.append('<tr><td class="resourceName"></td><td></td>');
     },
