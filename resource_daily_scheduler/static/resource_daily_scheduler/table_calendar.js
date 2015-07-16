@@ -31,8 +31,8 @@ $.widget( "resourceScheduler.tableCalendar", {
                                             '<td class="firstTd">' +
                                             '</td>' +
                                             '<td>' +
-                                                '<div class="divHeader" style="overflow:hidden;width:284px;">' +
-                                                    '<table>' +
+                                                '<div class="divHeader">' +
+                                                    '<table class="headerTable">' +
                                                     '<tr><!--<td></td>--></tr>' +
                                                     '</table>' +
                                                 '</div>' +
@@ -40,18 +40,18 @@ $.widget( "resourceScheduler.tableCalendar", {
                                         '</tr>' +
                                         '<tr>' +
                                             '<td valign="top">' +
-                                                '<div class="firstCol" style="overflow: hidden;height:80px">' +
-                                                    '<table width="200px" cellspacing="0" cellpadding="0" border="1" >' +
-                                                        '<tr><td></td></tr>' +
+                                                '<div class="firstCol">' +
+                                                    '<table>' +
+//                                                        '<tr><td></td></tr>' +
                                                     '</table>' +
                                                 '<div>' +
                                             '</td>' +
                                             '<td valign="top">' +
-                                                '<div class="tableDiv" style="overflow: scroll;width:300px;height:100px;position:relative" onscroll="fnScroll()" >' +
-                                                    '<table width="500px" cellspacing="0" cellpadding="0" border="1" >' +
-                                                        '<tr id="firstTr">' +
-                                                            '<td></td>' +
-                                                        '</tr>' +
+                                                '<div class="tableDiv" onscroll="fnScroll()" >' +
+                                                    '<table class="dataTable">' +
+//                                                        '<tr id="firstTr">' +
+//                                                            '<td></td>' +
+//                                                        '</tr>' +
                                                     '</table>' +
                                                 '</div>' +
                                             '</td>' +
@@ -99,8 +99,8 @@ $.widget( "resourceScheduler.tableCalendar", {
         var tableElem = $(".firstCol table", this.element);
         var contentTable = $(".tableDiv table", this.element);
         $.each(this.options.resources, function( index, value ){
-            tableElem.append('<tr><td resourceId="'+value.id+'" class="resourceName">'+
-                value.title+'</td><td><div class="rowContent"></div></td>'
+            tableElem.append('<tr><td resourceId="'+value.id+'" class="resourceName"><div>'+
+                value.title+'</div></td><td><div class="rowContent"></div></td>'
             //+ contentEntries.join("")+'</tr>'
             );
             contentTable.append("<tr>"+contentEntries.join("")+'</tr>');

@@ -1,4 +1,4 @@
-table.calendar {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;}
+/*table.calendar {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;}
 table.calendar tr {height:40px}
 table.calendar thead {background-color:#F6F6F6}
 table.calendar thead .resourceNameHeader {width:100px;}
@@ -19,7 +19,7 @@ table.rowTable td {border:solid 1px #CCC}
 table.rowTable thead .resourceNameHeader {width:100px;}
 table.rowTable .resourceName {width:100px;}
 table.rowTable .scrollTd {width:80%;}
-.rowTablePositioningDiv {position:absolute;}/*use absolute here, so the next element for parent div will still in the same start position*/
+.rowTablePositioningDiv {position:absolute;}*//*use absolute here, so the next element for parent div will still in the same start position*//*
 .rowTableViewDiv {height:200px;overflow-y:auto}
 .rowTableViewDiv {width:850px;}
 .rowTableViewDiv {position:relative; top:22px;}
@@ -42,5 +42,21 @@ table .scrollTd {width:80%;}
 .columnContainerTable tr td  div {width:25px;}
 .columnContainerContent div {height:200px;}
 
+*/
+.tableDiv {overflow: scroll;width:600px;height:500px;position:relative}/*right hand part width*/
+.headerTable {border:solid 1px #CCC}
 
-.tableDiv div {height:50px;}
+.headerTable div {height:50;width:50px;}
+.dataTable {width:300px;cellspacing:0;cellpadding:0;}
+.firstColumnTable {width:100px}
+.divHeader {overflow:hidden;width:600px;}/*right hand part width*/
+/*table td {border:solid 1px #CCC}*/
+.firstCol {overflow:hidden;height:500px}/*Container for the first column*/
+
+.topTable {border:solid 1px #CCC}
+table td {border:solid 1px #CCC}
+.dataTable {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;}
+/*.firstCol table {border:solid 1px #CCC}*/
+
+.tableDiv div {height:20px;width:50px;}
+.firstCol div {height:20px;}
