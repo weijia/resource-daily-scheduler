@@ -27,7 +27,7 @@ $.widget( "resourceScheduler.tableCalendar", {
         return date.getFullYear() + "-" + monthStr + "-" + dayStr;
     },
 
-    getFormattedDateFromDateStr: function(date){
+    extractDateFromDateStr: function(date){
         return date.split(" ")[0];
     },
  
@@ -114,8 +114,11 @@ $.widget( "resourceScheduler.tableCalendar", {
         $.each($(".firstCol td"), function(index, value){
             $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/"></a>');
         });
+        var formattedDate = this.getFormattedDate(new Date());
+        var todayLeft = this.getDateLeftFromDateStr(formattedDate);
+//        $('.divHeader').scrollLeft(todayLeft);
+        $('.tableDiv').scrollLeft(todayLeft);
 
-        
 
         $.get(getSchedule+"?start=2015-07-01&end=2015-08-01&_=1437058938623", function(result){
             //$("div").html(result);
@@ -136,11 +139,14 @@ $.widget( "resourceScheduler.tableCalendar", {
         }
         return null;
     },
-    getDateLeft: function(eventStartDateStr){
-        var eventStartDate = this.getFormattedDateFromDateStr(eventStartDateStr);
+    getDateLeftFromDateStr: function(eventStartDate){
         var eventDateTd = $(".headerTable td[date="+eventStartDate+"]");
         var left = eventDateTd.offset().left - eventDateTd.parent().parent().offset().left;
-        return left;
+        return left;    
+    },
+    getDateLeft: function(eventStartDateStr){
+        var eventStartDate = this.extractDateFromDateStr(eventStartDateStr);
+        return this.getDateLeftFromDateStr(eventStartDate);
     },
     addEvent: function(event){
         var top = this.getResourceTop(event.resourceId);
