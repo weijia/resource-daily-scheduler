@@ -145,9 +145,12 @@ $.widget( "resourceScheduler.tableCalendar", {
             var resourceTd = $("td", $(".firstCol tr")[rowIndex]);
             var resourceId = $(resourceTd).attr("resourceId");
             var dateCell = $(".headerTable td")[cellIndex]
-            var date = $(dateCell).attr("date");
-            date.replace("-", "/");
-            openRequestDialog(date, resourceId);
+            var dateStr = $(dateCell).attr("date");
+            var date = moment(dateStr);
+//            dateStr.replace("-", "/");
+//            var date = new Date(dateStr);
+            var formattedDate = date.format("MM/DD/YYYY")
+            openRequestDialog(formattedDate, resourceId);
         });
 
 
