@@ -173,15 +173,20 @@ function onDayClicked(date, jsEvent, view, resourceObj) {
     // change the day's background color just for fun
     //$(this).css('background-color', 'red');
 
-    $("#id_start").val(date.format("MM/DD/YYYY"));
+    openRequestDialog(date.format("MM/DD/YYYY"), resourceObj.id);
+}
+
+function openRequestDialog(formattedDate, resourceId){
+
+    $("#id_start").val(formattedDate);
     if(!isDialogSupported()){
-        redirectToUrl('create_booking_req/?start='+date.format("MM/DD/YYYY")+'&resourceId='+resourceObj.id);
+        redirectToUrl('create_booking_req/?start='+date.format("MM/DD/YYYY")+'&resourceId='+resourceId);
         return;
     }
     $( "#newBookingReqDialog" ).dialog("open");
     $("#id_end").datepicker( "option", "minDate", $("#id_start").datepicker( "getDate" ) );
     $("#id_end").focus();
-    $("#id_resource").val(resourceObj.id);
+    $("#id_resource").val(resourceId);
 }
 
 var dateObjForGettingTimeZoneOffset = new Date();

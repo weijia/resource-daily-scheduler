@@ -133,9 +133,16 @@ $.widget( "resourceScheduler.tableCalendar", {
             onEventClick();
         });
 
-        $(".dataTable").on("click", "td", function(a, b, c){
-            console.log(a, b, c);
-            onDayClicked();
+        $(".dataTable").on("click", "td", function(event){
+//            console.log(a, b, c);
+            var cellIndex = $(event.currentTarget).index();
+            var rowIndex = $(event.currentTarget).parent().index();
+            var resourceTd = $("td", $(".firstCol tr")[rowIndex]);
+            var resourceId = $(resourceTd).attr("resourceId");
+            var dateCell = $(".headerTable td")[cellIndex]
+            var date = $(dateCell).attr("date");
+            date.replace("-", "/");
+            openRequestDialog(date, resourceId);
         });
 
 
