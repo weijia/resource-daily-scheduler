@@ -128,9 +128,14 @@ $.widget( "resourceScheduler.tableCalendar", {
                 thisValue.addEvent(value);
             });
         });
-        $(".event").click(function(a, b, c){
-            console.log(a, b, c);
-            onEventClick();
+//        $(".event").click(function(a, b, c){
+//            console.log(a, b, c);
+//            onEventClick();
+//        });
+        $(".tableDiv").on("click", ".event", function(event){
+//            console.log(a, b, c);
+            var event = $(event.currentTarget).data("event");
+            onEventClick(event);
         });
 
         $(".dataTable").on("click", "td", function(event){
@@ -167,10 +172,13 @@ $.widget( "resourceScheduler.tableCalendar", {
     },
     addEvent: function(event){
         var top = this.getResourceTop(event.resourceId);
-        if(top){
-            var width = this.getDateLeft(event.end) + 20;
-            $(".tableDiv").append('<div class="event" style="top:'+top+'px;left:'+
-            this.getDateLeft(event.start)+'px;width:'+width+'px;background-color:'+event.color+'">'+'</div>');
+        if(top!=null){
+            var left = this.getDateLeft(event.start);
+            var width = this.getDateLeft(event.end) - left + 20;
+            var newElem = $('<div class="event" style="top:'+top+'px;left:'+
+            left+'px;width:'+width+'px;background-color:'+event.color+'">'+'</div>');
+            $(".tableDiv").append(newElem);
+            newElem.data("event", event);
         }
     },
     // Return an array of Date objects between `from` and `to`
