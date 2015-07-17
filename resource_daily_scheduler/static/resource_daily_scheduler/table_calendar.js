@@ -27,9 +27,15 @@ $.widget( "resourceScheduler.tableCalendar", {
         return date.getFullYear() + "-" + monthStr + "-" + dayStr;
     },
 
-    extractDateFromDateStr: function(date){
-        return date.split(" ")[0];
-    },
+//    extractDateFromDateStr: function(date){
+//        //return date.split(" ")[0];
+//        var momentDate = moment(date);
+//        momentDate.subtract(1, 'seconds');
+//        var dateStr = momentDate.format("YYYY-MM-DD");
+////        var dateStr = moment.tz(date, "Asia/Shanghai").format("YYYY-MM-DD");
+////        var dateStr = moment(date).tz("Asia/Shanghai").format("YYYY-MM-DD");
+//        return dateStr;
+//    },
  
     _create: function() {
 //        var progress = this.options.value + "%";
@@ -169,15 +175,21 @@ $.widget( "resourceScheduler.tableCalendar", {
         var left = eventDateTd.offset().left - eventDateTd.parent().parent().offset().left;
         return left;    
     },
-    getDateLeft: function(eventStartDateStr){
-        var eventStartDate = this.extractDateFromDateStr(eventStartDateStr);
-        return this.getDateLeftFromDateStr(eventStartDate);
+//    getDateLeft: function(eventStartDateStr){
+//        var eventStartDate = this.extractDateFromDateStr(eventStartDateStr);
+//        return this.getDateLeftFromDateStr(eventStartDate);
+//    },
+    getDateLeftFromMoment: function(momentDate){
+        var momentStr = momentDate.format("YYYY-MM-DD");
+        return this.getDateLeftFromDateStr(momentStr);
     },
     addEvent: function(event){
         var top = this.getResourceTop(event.resourceId);
         if(top!=null){
-            var left = this.getDateLeft(event.start);
-            var width = this.getDateLeft(event.end) - left + 20;
+            var startMoment = moment(event.start);
+            var endMoment = moment(event.end).subtract(1, "seconds");
+            var left = this.getDateLeftFromMoment(startMoment);
+            var width = this.getDateLeftFromMoment(endMoment) - left + 20;
             var newElem = $('<div class="event" style="top:'+top+'px;left:'+
             left+'px;width:'+width+'px;background-color:'+event.color+'">'+'</div>');
             $(".tableDiv").append(newElem);
