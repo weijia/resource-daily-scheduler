@@ -138,7 +138,7 @@ class ColorSchema(object):
     COLOR_WAITING_FOR_APPROVAL_FROM_OTHERS = "gray"
     COLOR_APPROVED_COMMA_YOU_CANNOT_CHANGE = "blue"
     COLOR_ONGOING = "green"
-    COLOR_CONFLICT = "black"
+    # COLOR_CONFLICT = "DarkGray"  # "black"
     COLOR_APPROVED_COMMA_YOU_CAN_CHANGE = "DeepPink"
     COLOR_COMPLETED = "aqua"
 
@@ -197,6 +197,8 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
             res.append(event)
         return HttpResponse(json.dumps(res), content_type="application/json")
 
+
+
     def get_color(self, event):
         color = self.COLOR_WAITING_FOR_APPROVAL_FROM_OTHERS
         has_perm = self.request.user.has_perm(self.resource_approval_permission, event.resource)
@@ -208,8 +210,8 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
         elif has_perm:
             if self.is_request_can_be_approved(event):
                 color = self.COLOR_WAITING_FOR_YOUR_APPROVAL
-            else:
-                color = self.COLOR_CONFLICT
+            # else:
+            #     color = self.COLOR_CONFLICT
         if event.is_ongoing:
             tz = pytz.timezone("Asia/Shanghai")
             end_datetime = event.end

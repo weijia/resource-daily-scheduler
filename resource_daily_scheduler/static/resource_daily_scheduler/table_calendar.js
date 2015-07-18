@@ -36,21 +36,8 @@ $.widget( "resourceScheduler.tableCalendar", {
 ////        var dateStr = moment(date).tz("Asia/Shanghai").format("YYYY-MM-DD");
 //        return dateStr;
 //    },
- 
-    _create: function() {
-//        var progress = this.options.value + "%";
-//        this.element.addClass( "progressbar" ).text( progress );
-//        console.log(this.options);
-        var today = new Date();
-        var startMonth = today.getMonth();
-        //var year = start.getFullYear();
-        var start = new Date();
-        start.setMonth(startMonth-2);
-        //end.setYear(year+1);
-        var end = new Date();
-        end.setMonth(startMonth+2);
-        // TODO: use a separate table for rows, so we will not get the limitation
-        // TODO: on the height setting of the table. Check fullcalendar.
+
+    createBasicElement: function(){
         var tableHeader = '<div class="fc-toolbar"><div class="fc-left"></div></div>'+
                             '<div>'+
                                 '<div class="topTableDiv">'+
@@ -88,8 +75,25 @@ $.widget( "resourceScheduler.tableCalendar", {
                                 '</div>' +
                             '</div>'
 
-        this.element.html(tableHeader//+tableBody+tableFooter
+            this.element.html(tableHeader//+tableBody+tableFooter
         );
+    },
+ 
+    _create: function() {
+//        var progress = this.options.value + "%";
+//        this.element.addClass( "progressbar" ).text( progress );
+//        console.log(this.options);
+        var today = new Date();
+        var startMonth = today.getMonth();
+        //var year = start.getFullYear();
+        var start = new Date();
+        start.setMonth(startMonth-2);
+        //end.setYear(year+1);
+        var end = new Date();
+        end.setMonth(startMonth+2);
+
+        this.createBasicElement();
+
         var entries = [];
         var contentEntries = [];
         var borderColor = this.options.borderColor;
@@ -125,10 +129,12 @@ $.widget( "resourceScheduler.tableCalendar", {
 //        $('.divHeader').scrollLeft(todayLeft);
         $('.tableDiv').scrollLeft(todayLeft);
 
+        var startStr = moment(start).format("YYYY-MM-DD");
+        var endStr = moment(end).format("YYYY-MM-DD");
 
-        $.get(getSchedule+"?start=2015-07-01&end=2015-08-01&_=1437058938623", function(result){
+        $.get(getSchedule+"?start="+startStr+"&end="+endStr+"&_="+Date.now, function(result){
             //$("div").html(result);
-            console.log(result);
+//            console.log(result);
             $.each($(result), function(index, value){
 //                $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/"></a>');
                 thisValue.addEvent(value);
@@ -190,8 +196,13 @@ $.widget( "resourceScheduler.tableCalendar", {
             var endMoment = moment(event.end).subtract(1, "seconds");
             var left = this.getDateLeftFromMoment(startMoment);
             var width = this.getDateLeftFromMoment(endMoment) - left + 20;
-            var newElem = $('<div class="event" style="top:'+top+'px;left:'+
-            left+'px;width:'+width+'px;background-color:'+event.color+'">'+'</div>');
+            var additionalClass = "";
+            if(event.className){
+                additionalClass = " "+event.className;
+            }
+            var newElem = $('<div class="event'+additionalClass+'" style="top:'+top+'px;left:'+
+            left+'px;width:'+width+'px;background-color:'+event.color+'" title="'+event.title+'">'+
+            event.title+'</div>');
             $(".tableDiv").append(newElem);
             newElem.data("event", event);
         }

@@ -1,19 +1,7 @@
-function msIeVersion() {
-    var ua = window.navigator.userAgent;
-    var msie = ua.indexOf("MSIE ");
-
-    if (msie > 0)      // If Internet Explorer, return version number
-        return (parseInt(ua.substring(msie + 5, ua.indexOf(".", msie))));
-//    else                 // If another browser, return 0
-//        alert('otherbrowser');
-
-    return false;
-}
-
 function isDialogSupported(){
     //return false;
     var ieVer = msIeVersion();
-    if(ieVer && ieVer<9) return false;
+//    if(ieVer && ieVer<9) return false;
     return true;
 }
 
@@ -38,7 +26,8 @@ function isApprover(){
 }
 
 function hasCreatePermission(){
-    return isAdmin;
+//    return isAdmin;
+    return false;
 }
 
 var gTodoLegend = ["Waiting for your approval", "Approved, you can change"//, "Ongoing"
@@ -59,8 +48,8 @@ $(function() { // document ready
 //    $(".fc-time").hide();
 
     $( "#dialog" ).dialog({"width": "800px", "autoOpen": false});
-    $( "#newBookingReqDialog" ).dialog({"width": "800px", "autoOpen": false});
-    $( "#bookingReqEditDialog" ).dialog({"width": "800px", "autoOpen": false});
+    $( "#newBookingReqDialog" ).dialog({"width": "800px", "autoOpen": false, title: "Create Request"});
+    $( "#bookingReqEditDialog" ).dialog({"width": "800px", "autoOpen": false, title: "Approve/Update Request"});
 
     $( "#dialog-confirm" ).dialog({
       resizable: false,
@@ -207,7 +196,7 @@ function isAdminFor(event){
 function onEventClick(calEvent, jsEvent, view) {
 
     //alert('Event: ' + calEvent.title);
-    console.log(calEvent);
+//    console.log(calEvent);
 
 //    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 //    alert('View: ' + view.name);

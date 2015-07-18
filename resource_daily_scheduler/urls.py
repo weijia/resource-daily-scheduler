@@ -23,7 +23,7 @@ urlpatterns = patterns(
     url(r'^requests/', include(resource_booking_req_views.urls)),
     # url(r'^resources_ajax/', include(resource_views_ajax.urls)),
     # url(r'^requests_ajax/', include(resource_booking_req_views_ajax.urls)),
-    # url(r'^$', login_required(ResourceScheduleTemplateView.as_view()), name="resource_scheduler"),
+    url(r'^test/', login_required(ResourceScheduleTemplateView.as_view()), name="resource_scheduler"),
     url(r'^jquery_gantt$', login_required(ResourceScheduleGanttView.as_view()), name="resource_scheduler_jquery_gantt"),
     # url(r'^jquery_gantt$', login_required(ResourceScheduleGanttView.as_view()), name="resource_scheduler_jquery_gantt"),
     # url(r'^table_schedule', login_required(ResourceTableScheduler.as_view()), name="resource_scheduler_jquery_gantt"),
