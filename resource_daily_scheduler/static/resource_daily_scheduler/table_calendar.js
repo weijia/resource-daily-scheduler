@@ -27,16 +27,6 @@ $.widget( "resourceScheduler.tableCalendar", {
         return date.getFullYear() + "-" + monthStr + "-" + dayStr;
     },
 
-//    extractDateFromDateStr: function(date){
-//        //return date.split(" ")[0];
-//        var momentDate = moment(date);
-//        momentDate.subtract(1, 'seconds');
-//        var dateStr = momentDate.format("YYYY-MM-DD");
-////        var dateStr = moment.tz(date, "Asia/Shanghai").format("YYYY-MM-DD");
-////        var dateStr = moment(date).tz("Asia/Shanghai").format("YYYY-MM-DD");
-//        return dateStr;
-//    },
-
     createBasicElement: function(){
         var tableHeader = '<div class="fc-toolbar"><div class="fc-left"></div></div>'+
                             '<div>'+
@@ -163,10 +153,7 @@ $.widget( "resourceScheduler.tableCalendar", {
                 thisValue.addEvent(value);
             });
         });
-//        $(".event").click(function(a, b, c){
-//            console.log(a, b, c);
-//            onEventClick();
-//        });
+
         $(".tableDiv").on("click", ".event", function(event){
 //            console.log(a, b, c);
             var event = $(event.currentTarget).data("event");
@@ -182,8 +169,6 @@ $.widget( "resourceScheduler.tableCalendar", {
             var dateCell = $(".headerTable td")[cellIndex]
             var dateStr = $(dateCell).attr("date");
             var date = moment(dateStr);
-//            dateStr.replace("-", "/");
-//            var date = new Date(dateStr);
             var formattedDate = date.format("MM/DD/YYYY")
             openRequestDialog(formattedDate, resourceId);
         });
@@ -211,10 +196,6 @@ $.widget( "resourceScheduler.tableCalendar", {
         var left = eventDateTd.offset().left - eventDateTd.parent().parent().offset().left;
         return left;    
     },
-//    getDateLeft: function(eventStartDateStr){
-//        var eventStartDate = this.extractDateFromDateStr(eventStartDateStr);
-//        return this.getDateLeftFromDateStr(eventStartDate);
-//    },
     getDateLeftFromMoment: function(momentDate){
         var momentStr = momentDate.format("YYYY-MM-DD");
         return this.getDateLeftFromDateStr(momentStr);
