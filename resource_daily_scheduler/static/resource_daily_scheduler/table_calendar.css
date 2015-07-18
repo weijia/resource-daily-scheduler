@@ -76,4 +76,6 @@ table td {border:solid 1px #CCC}
 
 .event {position:absolute;width:100px;height:100px;z-index:5;font-size:10px;overflow:hidden}
 
+td.today {background-color:LightYellow;}
+
 

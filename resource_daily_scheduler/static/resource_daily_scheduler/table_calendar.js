@@ -78,6 +78,10 @@ $.widget( "resourceScheduler.tableCalendar", {
             this.element.html(tableHeader//+tableBody+tableFooter
         );
     },
+
+    isToday: function(value){
+        return moment().format("YYYT-MM-DD") == moment(value).format("YYYT-MM-DD")
+    },
  
     _create: function() {
 //        var progress = this.options.value + "%";
@@ -86,11 +90,11 @@ $.widget( "resourceScheduler.tableCalendar", {
         var today = new Date();
         var startMonth = today.getMonth();
         //var year = start.getFullYear();
-        var start = new Date();
-        start.setMonth(startMonth-2);
+        this.start = new Date();
+        this.start.setMonth(startMonth-2);
         //end.setYear(year+1);
-        var end = new Date();
-        end.setMonth(startMonth+2);
+        this.end = new Date();
+        this.end.setMonth(startMonth+2);
 
         this.createBasicElement();
 
@@ -100,15 +104,19 @@ $.widget( "resourceScheduler.tableCalendar", {
         var isWeekEnd = this.isWeekEnd;
         var thisValue = this;
 //        var columnContainerTable = $(".columnContainerTable", this.element);
-        $.each(this.getDays(start, end), function( index, value ) {
-            var tdClass="";
-            var tdContentClass = "";
+        $.each(this.getDays(this.start, this.end), function( index, value ) {
+            var tdClasses=[];
+            var tdContentClass = [];
             if(isWeekEnd(value)){
-                tdClass=' class="weekend"';
-                tdContentClass=' class="weekendInContent"';
+                tdClasses.push('weekend');
+                tdContentClass.push('weekendInContent');
             }
-            entries.push('<td'+tdClass+' date="'+thisValue.getFormattedDate(value)+'"><div>'+value.getDate()+"</div></td>");
-            contentEntries.push('<td'+tdClass+'><div></div></td>');
+            if(thisValue.isToday(value)){
+                tdClasses.push("today");
+                tdContentClass.push("today");
+            }
+            entries.push('<td class="'+tdClasses.join(" ")+'" date="'+thisValue.getFormattedDate(value)+'"><div>'+value.getDate()+"</div></td>");
+            contentEntries.push('<td class="'+tdClasses.join(" ")+'"><div></div></td>');
         });
         $(".divHeader tr", this.element).html(entries.join(""));
 
@@ -124,13 +132,10 @@ $.widget( "resourceScheduler.tableCalendar", {
         $.each($(".firstCol td"), function(index, value){
             $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/"></a>');
         });
-        var formattedDate = this.getFormattedDate(new Date());
-        var todayLeft = this.getDateLeftFromDateStr(formattedDate);
-//        $('.divHeader').scrollLeft(todayLeft);
-        $('.tableDiv').scrollLeft(todayLeft);
+        this.scrollToThisWeek();
 
-        var startStr = moment(start).format("YYYY-MM-DD");
-        var endStr = moment(end).format("YYYY-MM-DD");
+        var startStr = moment(this.start).format("YYYY-MM-DD");
+        var endStr = moment(this.end).format("YYYY-MM-DD");
 
         $.get(getSchedule+"?start="+startStr+"&end="+endStr+"&_="+Date.now, function(result){
             //$("div").html(result);
@@ -167,6 +172,13 @@ $.widget( "resourceScheduler.tableCalendar", {
 
 
     },
+    scrollToThisWeek: function(){
+        var formattedDate = moment().subtract(7, "days").format("YYYY-MM-DD");
+        var todayLeft = this.getDateLeftFromDateStr(formattedDate);
+//        $('.divHeader').scrollLeft(todayLeft);
+        $('.tableDiv').scrollLeft(todayLeft);
+    },
+
     getResourceTop: function(resourceId){
         var selectorStr = ".resourceName[resourceId="+resourceId+"]";
         var elem = $(selectorStr);
@@ -194,6 +206,10 @@ $.widget( "resourceScheduler.tableCalendar", {
         if(top!=null){
             var startMoment = moment(event.start);
             var endMoment = moment(event.end).subtract(1, "seconds");
+            var tableStartMoment = moment(this.start);
+            var tableEndMoment = moment(this.end);
+            if(startMoment.diff(tableStartMoment)<0) startMoment = tableStartMoment;
+            if(endMoment.diff(tableEndMoment)>0) endMoment = tableEndMoment;
             var left = this.getDateLeftFromMoment(startMoment);
             var width = this.getDateLeftFromMoment(endMoment) - left + 20;
             var additionalClass = "";
