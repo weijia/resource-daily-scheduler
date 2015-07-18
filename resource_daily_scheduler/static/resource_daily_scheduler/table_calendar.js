@@ -49,6 +49,7 @@ $.widget( "resourceScheduler.tableCalendar", {
                                                 '<div class="divHeader">' +
                                                     '<table class="headerTable">' +
                                                     '<tr><!--<td></td>--></tr>' +
+                                                    '<tr><!--<td></td>--></tr>' +
                                                     '</table>' +
                                                 '</div>' +
                                             '</td>' +
@@ -104,6 +105,9 @@ $.widget( "resourceScheduler.tableCalendar", {
         var isWeekEnd = this.isWeekEnd;
         var thisValue = this;
 //        var columnContainerTable = $(".columnContainerTable", this.element);
+        var lastMonth = this.start.getMonth();
+        var lastMonthDayCnt = 0;
+        var monthEntries = [];
         $.each(this.getDays(this.start, this.end), function( index, value ) {
             var tdClasses=[];
             var tdContentClass = [];
@@ -115,10 +119,24 @@ $.widget( "resourceScheduler.tableCalendar", {
                 tdClasses.push("today");
                 tdContentClass.push("today");
             }
+            if(lastMonth == value.getMonth()){
+                ++lastMonthDayCnt;
+            }
+            else{
+//                ++lastMonthDayCnt;
+                monthEntries.push('<td class="month" colspan="'+lastMonthDayCnt+'">'+
+                                    moment(value).subtract(1, "month").format("MMMM")+'</td>');
+                lastMonthDayCnt = 1;
+                lastMonth = value.getMonth();
+            }
             entries.push('<td class="'+tdClasses.join(" ")+'" date="'+thisValue.getFormattedDate(value)+'"><div>'+value.getDate()+"</div></td>");
             contentEntries.push('<td class="'+tdClasses.join(" ")+'"><div></div></td>');
         });
-        $(".divHeader tr", this.element).html(entries.join(""));
+        monthEntries.push('<td colspan="'+lastMonthDayCnt+'">'+moment(this.end).format("MMMM")+'</td>');
+
+
+        $($(".divHeader tr", this.element)[0]).html(monthEntries.join(""));
+        $($(".divHeader tr", this.element)[1]).html(entries.join(""));
 
         var tableElem = $(".firstCol table", this.element);
         var contentTable = $(".tableDiv table", this.element);

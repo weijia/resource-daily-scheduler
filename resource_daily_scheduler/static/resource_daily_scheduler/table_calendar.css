@@ -76,6 +76,10 @@ table td {border:solid 1px #CCC}
 
 .event {position:absolute;width:100px;height:100px;z-index:5;font-size:10px;overflow:hidden}
 
-td.today {background-color:LightYellow;}
+td.today {background-color:LightGoldenrodYellow	;}
 
 
+.weekend {color: #939496;background-color:MintCream;}
+/*.weekend {color: #939496;background-color:#DDD;}*/
+
+.month {text-align:center}
