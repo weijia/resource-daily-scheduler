@@ -25,6 +25,9 @@
 .firstCol {overflow:hidden;}/*Container for the first column*/
 
 
+.firstCol {width:200px;}
+.resourceName div {width:200px;}
+
 .topTable {border:solid 1px #CCC}
 table td {border:solid 1px #CCC}
 .dataTable {border-collapse:collapse;font-family: Helvetica, Arial, sans-serif;text-align: center;}
