@@ -25,8 +25,8 @@
 .firstCol {overflow:hidden;}/*Container for the first column*/
 
 
-.firstCol {width:200px;}
-.resourceName div {width:200px;}
+.firstCol {width:400px;}
+.resourceName div {width:400px;}
 
 .topTable {border:solid 1px #CCC}
 table td {border:solid 1px #CCC}
