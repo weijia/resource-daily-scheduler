@@ -197,11 +197,9 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
             res.append(event)
         return HttpResponse(json.dumps(res), content_type="application/json")
 
-
-
     def get_color(self, event):
         color = self.COLOR_WAITING_FOR_APPROVAL_FROM_OTHERS
-        has_perm = self.request.user.has_perm(self.resource_approval_permission, event.resource)
+        has_perm = self.has_permission_to_manage_resource(event)
         if event.is_approved:
             if has_perm:
                 color = self.COLOR_APPROVED_COMMA_YOU_CAN_CHANGE
@@ -220,6 +218,9 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
             else:
                 color = self.COLOR_COMPLETED
         return color
+
+    def has_permission_to_manage_resource(self, event):
+        return self.request.user.has_perm(self.resource_approval_permission, event.resource)
 
 
 class ApproveRequestView(View, RequestApprovalMixin):

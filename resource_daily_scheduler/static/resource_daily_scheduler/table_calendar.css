@@ -42,3 +42,7 @@ td.today {background-color:LightGoldenrodYellow	;}
 /*.weekend {color: #939496;background-color:#DDD;}*/
 
 .month {text-align:center}
+
+
+tr:nth-child(even) {background: #EEE}
+tr:nth-child(odd) {background: #FFF}

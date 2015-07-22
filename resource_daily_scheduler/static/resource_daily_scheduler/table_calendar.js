@@ -38,8 +38,8 @@ $.widget( "resourceScheduler.tableCalendar", {
                                             '<td>' +
                                                 '<div class="divHeader">' +
                                                     '<table class="headerTable">' +
-                                                    '<tr><!--<td></td>--></tr>' +
-                                                    '<tr><!--<td></td>--></tr>' +
+                                                    '<tr class="monthRow"><!--<td></td>--></tr>' +
+                                                    '<tr class="dateRow"><!--<td></td>--></tr>' +
                                                     '</table>' +
                                                 '</div>' +
                                             '</td>' +
@@ -145,7 +145,7 @@ $.widget( "resourceScheduler.tableCalendar", {
         var startStr = moment(this.start).format("YYYY-MM-DD");
         var endStr = moment(this.end).format("YYYY-MM-DD");
 
-        $.get(getSchedule+"?start="+startStr+"&end="+endStr+"&_="+Date.now, function(result){
+        $.get(getSchedule+"?start="+startStr+"&end="+endStr+"&_="+Date.now(), function(result){
             //$("div").html(result);
 //            console.log(result);
             $.each($(result), function(index, value){
@@ -166,7 +166,7 @@ $.widget( "resourceScheduler.tableCalendar", {
             var rowIndex = $(event.currentTarget).parent().index();
             var resourceTd = $("td", $(".firstCol tr")[rowIndex]);
             var resourceId = $(resourceTd).attr("resourceId");
-            var dateCell = $(".headerTable td")[cellIndex]
+            var dateCell = $(".dateRow td")[cellIndex]
             var dateStr = $(dateCell).attr("date");
             var date = moment(dateStr);
             var formattedDate = date.format("MM/DD/YYYY")
