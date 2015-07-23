@@ -46,3 +46,14 @@ td.today {background-color:LightGoldenrodYellow	;}
 
 tr:nth-child(even) {background: #EEE}
 tr:nth-child(odd) {background: #FFF}
+
+#progressbar {
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    width:128px;
+    height:128px;
+    margin-top: -64px; /*set to a negative number 1/2 of your height*/
+    margin-left: -64px; /*set to a negative number 1/2 of your width*/
+    z-index:9;
+}
