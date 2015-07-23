@@ -28,7 +28,8 @@ $.widget( "resourceScheduler.tableCalendar", {
     },
 
     createBasicElement: function(){
-        var tableHeader = '<div class="fc-toolbar"><div class="fc-left"></div></div>'+
+        var tableHeader = '<img id="progressbar" src="/static/resource_daily_scheduler/loading.gif"/>'+
+                            '<div class="fc-toolbar"><div class="fc-left"></div></div>'+
                             '<div>'+
                                 '<div class="topTableDiv">'+
                                     '<table class="topTable">'+
@@ -152,6 +153,7 @@ $.widget( "resourceScheduler.tableCalendar", {
 //                $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/"></a>');
                 thisValue.addEvent(value);
             });
+            $("#progressbar").hide();
         });
 
         $(".tableDiv").on("click", ".event", function(event){
