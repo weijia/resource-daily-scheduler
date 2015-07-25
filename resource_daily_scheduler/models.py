@@ -36,6 +36,8 @@ class BookableResource(models.Model):
 class BookingRequestBase(models.Model):
     is_approved = models.BooleanField()
     is_ongoing = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)
+    is_canceled = models.BooleanField(default=False)
     start = models.DateTimeField()
     end = models.DateTimeField()
     project = models.CharField(max_length=256)
