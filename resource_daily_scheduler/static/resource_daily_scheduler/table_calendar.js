@@ -33,7 +33,7 @@ $.widget( "resourceScheduler.tableCalendar", {
         var tableHeader = '<img id="progressbar" src="/static/resource_daily_scheduler/loading.gif"/>'+
 //                            '<div class="highlightOperationArea"></div>' +
                             '<div class="fc-toolbar"><button class="goToToday">Scroll To Today</button>'+
-                            '<div class="fc-left"></div></div>'+
+                            '<div class="fc-left"><select class="yearSelector form-control"/></div></div>'+
                             '<div>'+
                                 '<div class="topTableDiv">'+
                                     '<table class="topTable">'+
@@ -95,6 +95,14 @@ $.widget( "resourceScheduler.tableCalendar", {
         this.end = endMoment.toDate();
 
     },
+
+    isThisYear: function(){
+        var today = new Date();
+        if(this.start.getFullYear()==today.getFullYear()){
+            return true;
+        }
+        return false;
+    },
  
     _create: function() {
 //        var progress = this.options.value + "%";
@@ -154,8 +162,12 @@ $.widget( "resourceScheduler.tableCalendar", {
         $.each($(".firstCol td"), function(index, value){
             $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/" target="_blank"></a>');
         });
-        this.scrollToThisWeek();
-
+        if(this.isThisYear()){
+            this.scrollToThisWeek();
+        }
+        else{
+            this.selectElemInWidget(".goToToday").hide();
+        }
         var startStr = moment(this.start).format("YYYY-MM-DD");
         var endStr = moment(this.end).format("YYYY-MM-DD");
 
@@ -202,6 +214,29 @@ $.widget( "resourceScheduler.tableCalendar", {
         });
         this.selectElemInWidget(".goToToday").click(function(){
             thisValue.scrollToThisWeek();
+        });
+
+//        this.selectElemInWidget('.yearSelector').datepicker( {
+//            changeMonth: true,
+//            changeYear: true,
+//            showButtonPanel: true,
+//            dateFormat: 'MM yy',
+//            onClose: function(dateText, inst) {
+//                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+//                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+//                $(this).datepicker('setDate', new Date(year, month, 1));
+//            }
+//        });
+        var start = this.start.getFullYear();
+        for (i = start-2; i < start+3; i++)
+        {
+            var elem = this.selectElemInWidget('.yearSelector').append($('<option />').val(i).html(i));
+//            if(i==start) elem.prop("checked", true);
+        }
+        this.selectElemInWidget('.yearSelector').val(start);
+        this.selectElemInWidget('.yearSelector').change(function(){
+            $(window.location).attr('href', "?start="+thisValue.selectElemInWidget('.yearSelector').val());
+
         });
 
     },

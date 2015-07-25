@@ -2,6 +2,7 @@ import json
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
 from djangoautoconf.class_based_views.form_factory import ModelFormFactory
+from djangoautoconf.django_utils import retrieve_param
 from resource_daily_scheduler.booking_req_views import AjaxableBookingRequestCreateView, ColorSchema
 from resource_daily_scheduler.models import BookableResource
 
@@ -41,6 +42,11 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
         # default_context["color_for_ongoing"] = self.ONGOING_COLOR
         # default_context["color_for_need_your_approval"] = self.WAITING_FOR_YOUR_APPROVAL_COLOR
         default_context["event_colors"] = json.dumps(self.get_colors())
+        data = retrieve_param(self.request)
+        if "start" in data:
+            default_context["year"] = int(data["start"])
+        else:
+            default_context["year"] = 2015
 
         default_context["is_admin"] = "false"
         default_context["page_title"] = self.page_title

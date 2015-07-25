@@ -28,6 +28,7 @@
 	$(function() { // document ready
 
 		$("#calendar").tableCalendar({
+			year: {{year}},
 			title: "{{resource_type}}",
 			resources:
 			{% block resource_list %}
