@@ -36,7 +36,7 @@ var gTodoLegend = ["Waiting for your approval", "Approved, you can change"//, "O
 
 function isTodoItem(legendText){
     for(var index in gTodoLegend){
-            if(legendText==gTodoLegend[index][1])
+            if(legendText==gTodoLegend[index])
                 return true
     }
     return false;
@@ -191,8 +191,6 @@ var currentTimeZoneOffsetInHours = dateObjForGettingTimeZoneOffset.getTimezoneOf
 
 
 function isAdminFor(event){
-//    if((event.color=="red")//||(event.color=="blue")
-//    ) return true;
     for(var index in gTodoLegend){
             if(event.color==eventColors[gTodoLegend[index]][1])
                 return true
@@ -201,35 +199,55 @@ function isAdminFor(event){
 }
 
 
-function onEventClick(calEvent, jsEvent, view) {
+function isOwnerModification(calEvent){
+    return true;
+}
 
-    //alert('Event: ' + calEvent.title);
-//    console.log(calEvent);
-
-//    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-//    alert('View: ' + view.name);
-//
-//    //change the border color just for fun
-//    $(this).css('border-color', 'red');
-
-    var targetEvent = $(this);
-//    if(!isApprover()) return;
-    if(!isAdminFor(calEvent)) return;
-
-    if(!isDialogSupported()){
-        redirectToUrl('req_update/'+calEvent.id +'/');
-        return;
-    }
-
+function initRequestUpdateDialog(calEvent){
     $("#bookingReqEditDialog").load('req_update_ajax/'+calEvent.id +'/', function(){
-//        $( "#bookingReqEditDialog" ).dialog({"width": "800px"});
         $("#id_update-start").datepicker();
         $("#id_update-end").datepicker();
-
         $("#id_update-end").datepicker( "option", "minDate", $("#id_update-start").datepicker( "getDate" ) );
-
         $("#bookingReqEditForm").attr("action", 'req_update/'+calEvent.id +'/');
+        if(isOwnerModification(calEvent)){
+            $("#id_update-is_approved").parents(".form-group").hide();
+            $("#id_update-is_ongoing").parents(".form-group").hide();
+            $("#id_update-is_completed").parents(".form-group").hide();
+            $("#id_update-is_canceled").parents(".form-group").hide();
+            $("input[type=submit]", $("#bookingReqEditForm")).after('<button id="cancel">'+
+                "Cancel Request</button>");
+            $("#id_update-project").attr("autofocus", true);
+            $("#cancel").click(function(){
+                $("#id_update-is_canceled").prop('checked', true);
+                $("#bookingReqEditForm").submit()
+            });
+
+//            var buttons = $("#bookingReqEditDialog").dialog( "option", "buttons");
+//            buttons.push({text: "Cancel Request"});
+//            $("#bookingReqEditDialog").dialog( "option", "buttons",
+//                      [
+//                        {
+//                          text: "Ok",
+//                          click: function() {
+//                            //$( this ).dialog( "close" );
+//                            $("#id_update-is_completed").prop('checked', true);
+//                            $("#bookingReqEditForm").submit()
+//                          }
+//
+//                          // Uncommenting the following line would hide the text,
+//                          // resulting in the label being used as a tooltip
+//                          //showText: false
+//                        }
+//                      ]
+//                    );
+        }
         $( "#bookingReqEditDialog" ).dialog("open");
     });
+}
 
+function onEventClick(calEvent, jsEvent, view) {
+//    var targetEvent = $(this);
+//    if(!isApprover()) return;
+    if(!isAdminFor(calEvent)) return;
+    initRequestUpdateDialog(calEvent);
 }

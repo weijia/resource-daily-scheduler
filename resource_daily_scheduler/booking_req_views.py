@@ -113,6 +113,8 @@ class AjaxableBookingRequestUpdateView(AjaxableResponseMixin, AjaxableFormContex
             candidate.save()
         else:
             candidate.is_approved = False
+        # if candidate.is_canceled:
+        #     candidate.save()
         # In ModelFormMixin.form_valid, form.save() and its parent's form_valid will be called
         # And in FormMixin (ModelFormMixin's parent) HttpResponseRedirect(self.get_success_url()) will be called
         response = super(AjaxableBookingRequestUpdateView, self).form_valid(form)
@@ -141,6 +143,7 @@ class ColorSchema(object):
     COLOR_5_ONGOING = "green"
     # COLOR_CONFLICT = "DarkGray"  # "black"
     COLOR_6_COMPLETED = "aqua"
+    COLOR_7_CANCELED = "limegreen"
 
     def get_colors(self):
         colors = {}
@@ -171,13 +174,6 @@ class ColorSchema(object):
 class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
     model = BookingRequest
     resource_approval_permission = "change_bookableresource"
-    # color_schema = {"Waiting for your approval": "red",
-    #                 "Waiting for approval from others": "gray",
-    #                 "Approved": "blue",
-    #                 "On going": "green",
-    #                 "Conflicted": "black",
-    #                 "Approved, can be set to ongoing": "DarkSlateGray"
-    #                 }
 
     def get(self, request, *args, **kwargs):
         data = retrieve_param(request)
@@ -201,7 +197,17 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
     def get_color(self, event):
         color = self.COLOR_2_WAITING_FOR_APPROVAL_FROM_OTHERS
         has_perm = self.has_permission_to_manage_resource(event)
-        if event.is_approved:
+        if event.is_canceled:
+            color = self.COLOR_7_CANCELED
+        elif event.is_completed:
+            color = self.COLOR_6_COMPLETED
+        elif event.is_ongoing:
+            # tz = pytz.timezone("Asia/Shanghai")
+            # end_datetime = event.end
+            # if event.end < end_datetime.astimezone(tz):
+            #     color = self.COLOR_5_ONGOING
+            color = self.COLOR_5_ONGOING
+        elif event.is_approved:
             if has_perm:
                 color = self.COLOR_3_APPROVED_COMMA_YOU_CAN_CHANGE
             else:
@@ -209,15 +215,9 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
         elif has_perm:
             if self.is_request_can_be_approved(event):
                 color = self.COLOR_1_WAITING_FOR_YOUR_APPROVAL
-            # else:
-            #     color = self.COLOR_CONFLICT
-        if event.is_ongoing:
-            tz = pytz.timezone("Asia/Shanghai")
-            end_datetime = event.end
-            if event.end < end_datetime.astimezone(tz):
-                color = self.COLOR_5_ONGOING
-        if event.is_completed:
-            color = self.COLOR_6_COMPLETED
+                # else:
+                #     color = self.COLOR_CONFLICT
+
         return color
 
     def has_permission_to_manage_resource(self, event):
