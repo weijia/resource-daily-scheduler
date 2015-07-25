@@ -26,7 +26,7 @@ class BookingRequestForm(forms.ModelForm):
 
     class Meta:
         model = BookingRequest
-        exclude = ["is_approved", "requester", "approver", "is_ongoing", "is_completed"]
+        exclude = ["is_approved", "requester", "approver", "is_ongoing", "is_completed", "is_canceled"]
 
 
 class BookingRequestUpdateForm(BookingRequestForm):
@@ -136,10 +136,10 @@ class ResourceApproverUpdater(object):
 class ColorSchema(object):
     COLOR_1_WAITING_FOR_YOUR_APPROVAL = "yellow"
     COLOR_2_WAITING_FOR_APPROVAL_FROM_OTHERS = "gray"
+    COLOR_3_APPROVED_COMMA_YOU_CAN_CHANGE = "DeepPink"
     COLOR_4_APPROVED_COMMA_YOU_CANNOT_CHANGE = "blue"
     COLOR_5_ONGOING = "green"
     # COLOR_CONFLICT = "DarkGray"  # "black"
-    COLOR_3_APPROVED_COMMA_YOU_CAN_CHANGE = "DeepPink"
     COLOR_6_COMPLETED = "aqua"
 
     def get_colors(self):

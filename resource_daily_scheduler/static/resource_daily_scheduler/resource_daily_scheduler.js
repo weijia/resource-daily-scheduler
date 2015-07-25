@@ -36,7 +36,7 @@ var gTodoLegend = ["Waiting for your approval", "Approved, you can change"//, "O
 
 function isTodoItem(legendText){
     for(var index in gTodoLegend){
-            if(legendText==gTodoLegend[index])
+            if(legendText==gTodoLegend[index][1])
                 return true
     }
     return false;
@@ -194,7 +194,7 @@ function isAdminFor(event){
 //    if((event.color=="red")//||(event.color=="blue")
 //    ) return true;
     for(var index in gTodoLegend){
-            if(event.color==eventColors[gTodoLegend[index]])
+            if(event.color==eventColors[gTodoLegend[index]][1])
                 return true
     }
     return false;
