@@ -26,7 +26,7 @@ class BookingRequestForm(forms.ModelForm):
 
     class Meta:
         model = BookingRequest
-        exclude = ["is_approved", "requester", "approver", "is_ongoing"]
+        exclude = ["is_approved", "requester", "approver", "is_ongoing", "is_completed"]
 
 
 class BookingRequestUpdateForm(BookingRequestForm):
@@ -134,13 +134,13 @@ class ResourceApproverUpdater(object):
 
 
 class ColorSchema(object):
-    COLOR_WAITING_FOR_YOUR_APPROVAL = "red"
-    COLOR_WAITING_FOR_APPROVAL_FROM_OTHERS = "gray"
-    COLOR_APPROVED_COMMA_YOU_CANNOT_CHANGE = "blue"
-    COLOR_ONGOING = "green"
+    COLOR_1_WAITING_FOR_YOUR_APPROVAL = "yellow"
+    COLOR_2_WAITING_FOR_APPROVAL_FROM_OTHERS = "gray"
+    COLOR_4_APPROVED_COMMA_YOU_CANNOT_CHANGE = "blue"
+    COLOR_5_ONGOING = "green"
     # COLOR_CONFLICT = "DarkGray"  # "black"
-    COLOR_APPROVED_COMMA_YOU_CAN_CHANGE = "DeepPink"
-    COLOR_COMPLETED = "aqua"
+    COLOR_3_APPROVED_COMMA_YOU_CAN_CHANGE = "DeepPink"
+    COLOR_6_COMPLETED = "aqua"
 
     def get_colors(self):
         colors = {}
@@ -150,11 +150,12 @@ class ColorSchema(object):
             if attr[:6] != "COLOR_":
                 continue
             value = getattr(ColorSchema, attr)
-            attr_name = attr[6:]
+            index = int(attr[6])
+            attr_name = attr[8:]
             attr_name = attr_name.replace("_COMMA", ",")
             attr_name = attr_name.lower()
             attr_name = attr_name.replace("_", " ")
-            colors[attr_name.capitalize()] = value
+            colors[attr_name.capitalize()] = (index, value)
         return colors
 
 
@@ -191,32 +192,32 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
             color = self.get_color(event)
             event = {"id": "%d" % event.pk, "resourceId": "%d" % event.resource.pk, "start": str(event.start),
                      "end": str(event.end), "title": event.project, "color": color}
-            if color in [self.COLOR_WAITING_FOR_YOUR_APPROVAL,  # self.COLOR_ONGOING,
-                         self.COLOR_APPROVED_COMMA_YOU_CAN_CHANGE]:
+            if color in [self.COLOR_1_WAITING_FOR_YOUR_APPROVAL,  # self.COLOR_ONGOING,
+                         self.COLOR_4_APPROVED_COMMA_YOU_CAN_CHANGE]:
                 event["className"] = "todo"
             res.append(event)
         return HttpResponse(json.dumps(res), content_type="application/json")
 
     def get_color(self, event):
-        color = self.COLOR_WAITING_FOR_APPROVAL_FROM_OTHERS
+        color = self.COLOR_2_WAITING_FOR_APPROVAL_FROM_OTHERS
         has_perm = self.has_permission_to_manage_resource(event)
         if event.is_approved:
             if has_perm:
-                color = self.COLOR_APPROVED_COMMA_YOU_CAN_CHANGE
+                color = self.COLOR_3_APPROVED_COMMA_YOU_CAN_CHANGE
             else:
-                color = self.COLOR_APPROVED_COMMA_YOU_CANNOT_CHANGE
+                color = self.COLOR_4_APPROVED_COMMA_YOU_CANNOT_CHANGE
         elif has_perm:
             if self.is_request_can_be_approved(event):
-                color = self.COLOR_WAITING_FOR_YOUR_APPROVAL
+                color = self.COLOR_1_WAITING_FOR_YOUR_APPROVAL
             # else:
             #     color = self.COLOR_CONFLICT
         if event.is_ongoing:
             tz = pytz.timezone("Asia/Shanghai")
             end_datetime = event.end
             if event.end < end_datetime.astimezone(tz):
-                color = self.COLOR_ONGOING
-            else:
-                color = self.COLOR_COMPLETED
+                color = self.COLOR_5_ONGOING
+        if event.is_completed:
+            color = self.COLOR_6_COMPLETED
         return color
 
     def has_permission_to_manage_resource(self, event):

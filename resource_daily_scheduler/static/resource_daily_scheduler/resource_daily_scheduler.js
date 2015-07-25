@@ -142,9 +142,17 @@ $(function() { // document ready
         if(isTodoItem(key)){
             classAttr += " todo"
         }
-        legendHtml += '<div class="'+classAttr+'" style="background-color:'+value+'">'+key+'</div>';
+        legendHtml += '<div class="'+classAttr+'" style="background-color:'+value[1]+
+                        '" data-sort="'+value[0]+'">'+key+'</div>';
     });
     $("#legendArea").html(legendHtml);
+    $('#legendArea div').sort(function (a, b) {
+
+      var contentA =parseInt( $(a).attr('data-sort'));
+      var contentB =parseInt( $(b).attr('data-sort'));
+      return (contentA < contentB) ? -1 : (contentA > contentB) ? 1 : 0;
+   }).appendTo( $("#legendArea") );
+
 });
 
 function redirectToUrl(target){
@@ -223,41 +231,5 @@ function onEventClick(calEvent, jsEvent, view) {
         $("#bookingReqEditForm").attr("action", 'req_update/'+calEvent.id +'/');
         $( "#bookingReqEditDialog" ).dialog("open");
     });
-
-
-//
-//    $( "#dialog-confirm" ).dialog( "option", "buttons",
-//        [
-//            {
-//                text: "Approve",
-//                click: function() {
-//                    targetEvent.css('background-color', 'blue');
-//                    $( this ).dialog( "close" );
-//                          $.ajax({
-//                                type: 'GET',
-//                                url: "approve_request/",
-//                                data: {"requestId": calEvent.id},
-//                                success: function(a, b, c){
-//                                    //console.log(a, b, c);
-//                                    //console.log(a.result);
-//                                    if(a.result=="true"){
-//                                        targetEvent.css('background-color', approvedRequestColor);
-//                                    }
-//                                    else{
-//                                        targetEvent.css('background-color', notApprovedRequestColor);
-//                                    }
-//                                }
-//                            });
-//                }
-//            },
-//            {
-//                text: "Cancel",
-//                click: function() {
-//                    $( this ).dialog( "close" );
-//                }
-//            }
-//         ]
-//    );
-//    $( "#dialog-confirm" ).dialog("open");
 
 }

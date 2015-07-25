@@ -139,7 +139,7 @@ $.widget( "resourceScheduler.tableCalendar", {
         });
 
         $.each($(".firstCol td"), function(index, value){
-            $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/"></a>');
+            $(value).wrapInner('<a href="'+detailPath+$(value).attr('resourceId')+'/" target="_blank"></a>');
         });
         this.scrollToThisWeek();
 
