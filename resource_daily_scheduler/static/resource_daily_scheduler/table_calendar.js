@@ -2,7 +2,8 @@ $.widget( "resourceScheduler.tableCalendar", {
 
     options: {
         borderColor: "#DDD",
-        title: ""
+        title: "",
+        year: 2015
     },
     isWeekEnd: function(date){
         var weekday = date.getDay();
@@ -31,7 +32,8 @@ $.widget( "resourceScheduler.tableCalendar", {
     createBasicElement: function(){
         var tableHeader = '<img id="progressbar" src="/static/resource_daily_scheduler/loading.gif"/>'+
 //                            '<div class="highlightOperationArea"></div>' +
-                            '<div class="fc-toolbar"><div class="fc-left"></div></div>'+
+                            '<div class="fc-toolbar"><button class="goToToday">Scroll To Today</button>'+
+                            '<div class="fc-left"></div></div>'+
                             '<div>'+
                                 '<div class="topTableDiv">'+
                                     '<table class="topTable">'+
@@ -76,20 +78,29 @@ $.widget( "resourceScheduler.tableCalendar", {
     isToday: function(value){
         return moment().format("YYYT-MM-DD") == moment(value).format("YYYT-MM-DD")
     },
+
+    setStartEnd: function(){
+//        var today = new Date();
+//        var startMonth = today.getMonth();
+//        //var year = start.getFullYear();
+//        this.start = new Date();
+//        this.start.setMonth(startMonth-2);
+//        //end.setYear(year+1);
+//        this.end = new Date();
+//        this.end.setMonth(startMonth+2);
+        var startMoment =  moment(this.options.year+"-01-01");
+        var nextYear = (this.options.year)+1;
+        var endMoment = moment(nextYear+"-01-01");
+        this.start = startMoment.toDate();
+        this.end = endMoment.toDate();
+
+    },
  
     _create: function() {
 //        var progress = this.options.value + "%";
 //        this.element.addClass( "progressbar" ).text( progress );
 //        console.log(this.options);
-        var today = new Date();
-        var startMonth = today.getMonth();
-        //var year = start.getFullYear();
-        this.start = new Date();
-        this.start.setMonth(startMonth-2);
-        //end.setYear(year+1);
-        this.end = new Date();
-        this.end.setMonth(startMonth+2);
-
+        this.setStartEnd();
         this.createBasicElement();
 
         var entries = [];
@@ -164,14 +175,20 @@ $.widget( "resourceScheduler.tableCalendar", {
         });
 
     },
+
+    selectElemInWidget: function(selector){
+        return $(selector, this.element);
+    },
+
     registerClickEvents: function(){
+        var thisValue = this;
         $(".tableDiv").on("click", ".event", function(event){
 //            console.log(a, b, c);
             var event = $(event.currentTarget).data("event");
             onEventClick(event);
         });
 
-        $(".dataTable").on("click", "td", function(event){
+        this.selectElemInWidget(".dataTable").on("click", "td", function(event){
 //            console.log(a, b, c);
             var cellIndex = $(event.currentTarget).index();
             var rowIndex = $(event.currentTarget).parent().index();
@@ -182,6 +199,9 @@ $.widget( "resourceScheduler.tableCalendar", {
             var date = moment(dateStr);
             var formattedDate = date.format("MM/DD/YYYY")
             openRequestDialog(formattedDate, resourceId);
+        });
+        this.selectElemInWidget(".goToToday").click(function(){
+            thisValue.scrollToThisWeek();
         });
 
     },
@@ -228,7 +248,7 @@ $.widget( "resourceScheduler.tableCalendar", {
             var newElem = $('<div class="event'+additionalClass+'" style="top:'+top+'px;left:'+
             left+'px;width:'+width+'px;background-color:'+event.color+'" title="'+event.title+'">'+
             event.title+'</div>');
-            $(".tableDiv").append(newElem);
+            this.selectElemInWidget(".tableDiv").append(newElem);
             newElem.data("event", event);
         }
     },
