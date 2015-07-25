@@ -193,7 +193,7 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
             event = {"id": "%d" % event.pk, "resourceId": "%d" % event.resource.pk, "start": str(event.start),
                      "end": str(event.end), "title": event.project, "color": color}
             if color in [self.COLOR_1_WAITING_FOR_YOUR_APPROVAL,  # self.COLOR_ONGOING,
-                         self.COLOR_4_APPROVED_COMMA_YOU_CAN_CHANGE]:
+                         self.COLOR_3_APPROVED_COMMA_YOU_CAN_CHANGE]:
                 event["className"] = "todo"
             res.append(event)
         return HttpResponse(json.dumps(res), content_type="application/json")
