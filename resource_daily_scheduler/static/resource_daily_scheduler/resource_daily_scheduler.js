@@ -200,7 +200,7 @@ function isAdminFor(event){
 
 
 function isOwnerModification(calEvent){
-    if(event.color==eventColors["Your request"][1])
+    if(calEvent.color==eventColors["Your request"][1])
         return true;
     else
         return false;
