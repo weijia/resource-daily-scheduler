@@ -16,6 +16,8 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
     resource_detail = "update_resource/"
     # resource_create_view_class = BookableResourceCreateView
     request_create_view = AjaxableBookingRequestCreateView
+    page_title = "Resource Reservation System"
+    resource_title = "Resources"
 
     def get_context_data(self, **kwargs):
         default_context = super(ResourceScheduleTemplateView, self).get_context_data(**kwargs)
@@ -24,7 +26,7 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
         for resource in resource_list_query:
             resource_list.append({"id": str(resource.pk), "title": resource.get_title()})
         default_context["resource_list"] = json.dumps(resource_list)
-        default_context["resource_type"] = 'Test'
+        default_context["resource_type"] = self.resource_title
         default_context["get_schedule"] = reverse(self.get_schedule_url_name)
 
         # default_context["new_resource_form"] = self.resource_create_view_class().get_form_class()
@@ -41,6 +43,7 @@ class ResourceScheduleTemplateView(TemplateView, ColorSchema):
         default_context["event_colors"] = json.dumps(self.get_colors())
 
         default_context["is_admin"] = "false"
+        default_context["page_title"] = self.page_title
         if self.request.user.has_perm(self.resource_permission_id):
             default_context["is_admin"] = "true"
         return default_context

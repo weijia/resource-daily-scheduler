@@ -36,6 +36,7 @@ table td {border:solid 1px #CCC}
 .event {position:absolute;width:100px;height:100px;z-index:5;font-size:10px;overflow:hidden}
 
 td.today {background-color:LightGoldenrodYellow	;}
+td.today {background-color:yellow	;}
 
 
 .weekend {color: #939496;background-color:MintCream;}
@@ -57,3 +58,10 @@ tr:nth-child(odd) {background: #FFF}
     margin-left: -64px; /*set to a negative number 1/2 of your width*/
     z-index:9;
 }
+
+
+.resourceTitleTd {font: bold 12px arial,sans-serif; text-align:center}
+/*.highlightOperationArea {border: solid black 2px;}*/
+.tableDiv {outline: thick solid grey}
+
+#legendArea {padding: 10px;}

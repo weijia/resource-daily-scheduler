@@ -1,7 +1,8 @@
 $.widget( "resourceScheduler.tableCalendar", {
 
     options: {
-        borderColor: "#DDD"
+        borderColor: "#DDD",
+        title: ""
     },
     isWeekEnd: function(date){
         var weekday = date.getDay();
@@ -29,12 +30,13 @@ $.widget( "resourceScheduler.tableCalendar", {
 
     createBasicElement: function(){
         var tableHeader = '<img id="progressbar" src="/static/resource_daily_scheduler/loading.gif"/>'+
+//                            '<div class="highlightOperationArea"></div>' +
                             '<div class="fc-toolbar"><div class="fc-left"></div></div>'+
                             '<div>'+
                                 '<div class="topTableDiv">'+
                                     '<table class="topTable">'+
                                         '<tr>' +
-                                            '<td class="firstTd">' +
+                                            '<td class="resourceTitleTd">' + this.options.title +
                                             '</td>' +
                                             '<td>' +
                                                 '<div class="divHeader">' +
@@ -154,8 +156,15 @@ $.widget( "resourceScheduler.tableCalendar", {
                 thisValue.addEvent(value);
             });
             $("#progressbar").hide();
+//            var pos = $(".tableDiv", thisValue.element).offset();
+//            $(".highlightOperationArea", thisValue.element).offset([pos.left, pos.top]);
+//            $(".highlightOperationArea", this.element).offset().left($(".tableDiv", this.element).offset().left);
+            thisValue.registerClickEvents();
+
         });
 
+    },
+    registerClickEvents: function(){
         $(".tableDiv").on("click", ".event", function(event){
 //            console.log(a, b, c);
             var event = $(event.currentTarget).data("event");
@@ -174,7 +183,6 @@ $.widget( "resourceScheduler.tableCalendar", {
             var formattedDate = date.format("MM/DD/YYYY")
             openRequestDialog(formattedDate, resourceId);
         });
-
 
     },
     scrollToThisWeek: function(){
