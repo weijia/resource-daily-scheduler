@@ -113,8 +113,6 @@ class AjaxableBookingRequestUpdateView(AjaxableResponseMixin, AjaxableFormContex
             candidate.save()
         else:
             candidate.is_approved = False
-        # if candidate.is_canceled:
-        #     candidate.save()
         # In ModelFormMixin.form_valid, form.save() and its parent's form_valid will be called
         # And in FormMixin (ModelFormMixin's parent) HttpResponseRedirect(self.get_success_url()) will be called
         response = super(AjaxableBookingRequestUpdateView, self).form_valid(form)
@@ -136,14 +134,15 @@ class ResourceApproverUpdater(object):
 
 
 class ColorSchema(object):
+    COLOR_0_YOUR_REQUEST = "tomato"
     COLOR_1_WAITING_FOR_YOUR_APPROVAL = "yellow"
-    COLOR_2_WAITING_FOR_APPROVAL_FROM_OTHERS = "gray"
+    COLOR_2_WAITING_FOR_APPROVAL_FROM_OTHERS = "limegreen"
     COLOR_3_APPROVED_COMMA_YOU_CAN_CHANGE = "DeepPink"
     COLOR_4_APPROVED_COMMA_YOU_CANNOT_CHANGE = "blue"
     COLOR_5_ONGOING = "green"
     # COLOR_CONFLICT = "DarkGray"  # "black"
     COLOR_6_COMPLETED = "aqua"
-    COLOR_7_CANCELED = "limegreen"
+    COLOR_7_CANCELED = "grey"
 
     def get_colors(self):
         colors = {}
@@ -160,15 +159,6 @@ class ColorSchema(object):
             attr_name = attr_name.replace("_", " ")
             colors[attr_name.capitalize()] = (index, value)
         return colors
-
-
-# color_schema = {"Waiting for your approval": "red",
-#                 "Waiting for approval from others": "gray",
-#                 "Approved": "blue",
-#                 "On going": "green",
-#                 "Conflicted": "black",
-#                 "Approved, can be set to ongoing": "DarkSlateGray"
-#                 }
 
 
 class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
@@ -188,8 +178,8 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
             color = self.get_color(event)
             event = {"id": "%d" % event.pk, "resourceId": "%d" % event.resource.pk, "start": str(event.start),
                      "end": str(event.end), "title": event.project, "color": color}
-            if color in [self.COLOR_1_WAITING_FOR_YOUR_APPROVAL,  # self.COLOR_ONGOING,
-                         self.COLOR_3_APPROVED_COMMA_YOU_CAN_CHANGE]:
+            if color in [self.COLOR_1_WAITING_FOR_YOUR_APPROVAL,  self.COLOR_5_ONGOING,
+                         self.COLOR_3_APPROVED_COMMA_YOU_CAN_CHANGE, self.COLOR_0_YOUR_REQUEST]:
                 event["className"] = "todo"
             res.append(event)
         return HttpResponse(json.dumps(res), content_type="application/json")
@@ -217,6 +207,8 @@ class GetScheduleView(View, ColorSchema, RequestApprovalMixin):
                 color = self.COLOR_1_WAITING_FOR_YOUR_APPROVAL
                 # else:
                 #     color = self.COLOR_CONFLICT
+        elif event.requester == self.request.user:
+            color = self.COLOR_0_YOUR_REQUEST
 
         return color
 

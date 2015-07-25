@@ -30,7 +30,7 @@ function hasCreatePermission(){
     return false;
 }
 
-var gTodoLegend = ["Waiting for your approval", "Approved, you can change"//, "Ongoing"
+var gTodoLegend = ["Waiting for your approval", "Approved, you can change", "Ongoing", "Your request"
 ];
 
 
@@ -200,7 +200,10 @@ function isAdminFor(event){
 
 
 function isOwnerModification(calEvent){
-    return true;
+    if(event.color==eventColors["Your request"][1])
+        return true;
+    else
+        return false;
 }
 
 function initRequestUpdateDialog(calEvent){
@@ -213,34 +216,17 @@ function initRequestUpdateDialog(calEvent){
             $("#id_update-is_approved").parents(".form-group").hide();
             $("#id_update-is_ongoing").parents(".form-group").hide();
             $("#id_update-is_completed").parents(".form-group").hide();
-            $("#id_update-is_canceled").parents(".form-group").hide();
-            $("input[type=submit]", $("#bookingReqEditForm")).after('<button id="cancel">'+
-                "Cancel Request</button>");
-            $("#id_update-project").attr("autofocus", true);
-            $("#cancel").click(function(){
-                $("#id_update-is_canceled").prop('checked', true);
-                $("#bookingReqEditForm").submit()
-            });
-
-//            var buttons = $("#bookingReqEditDialog").dialog( "option", "buttons");
-//            buttons.push({text: "Cancel Request"});
-//            $("#bookingReqEditDialog").dialog( "option", "buttons",
-//                      [
-//                        {
-//                          text: "Ok",
-//                          click: function() {
-//                            //$( this ).dialog( "close" );
-//                            $("#id_update-is_completed").prop('checked', true);
-//                            $("#bookingReqEditForm").submit()
-//                          }
-//
-//                          // Uncommenting the following line would hide the text,
-//                          // resulting in the label being used as a tooltip
-//                          //showText: false
-//                        }
-//                      ]
-//                    );
         }
+
+        $("#id_update-is_canceled").parents(".form-group").hide();
+        $("input[type=submit]", $("#bookingReqEditForm")).after('<button id="cancel">'+
+            "Cancel Request</button>");
+        $("#id_update-project").attr("autofocus", true);
+        $("#cancel").click(function(){
+            $("#id_update-is_canceled").prop('checked', true);
+            $("#bookingReqEditForm").submit()
+        });
+
         $( "#bookingReqEditDialog" ).dialog("open");
     });
 }
