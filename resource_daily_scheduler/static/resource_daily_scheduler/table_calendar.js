@@ -33,7 +33,7 @@ $.widget( "resourceScheduler.tableCalendar", {
         var tableHeader = '<img id="progressbar" src="/static/resource_daily_scheduler/loading.gif"/>'+
 //                            '<div class="highlightOperationArea"></div>' +
                             '<div class="fc-toolbar"><button class="goToToday">Scroll To Today</button>'+
-                            '<div class="fc-left"><select class="yearSelector form-control"/></div></div>'+
+                            '<div class="tb-right"><select class="yearSelector form-control"/></div></div>'+
                             '<div>'+
                                 '<div class="topTableDiv">'+
                                     '<table class="topTable">'+

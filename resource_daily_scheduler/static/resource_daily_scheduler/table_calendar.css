@@ -78,3 +78,6 @@ tr:nth-child(odd) {background: #FFF}
   -webkit-box-sizing:border-box;
   border: 3px solid; border-color: red!important
 }
+
+.goToToday {float:left}
+.tb-right {float:right}
