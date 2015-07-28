@@ -41,7 +41,7 @@ class BookingRequestBase(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
     project = models.CharField(max_length=256)
-    comments = models.CharField(max_length=256)
+    comments = models.CharField(max_length=256, null=True, blank=True, default="")
 
     def clean_fields(self, exclude=None):
         """
