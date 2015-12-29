@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url, include
 from django.contrib.auth.decorators import login_required
-from django.views.generic.simple import redirect_to
+from django.views.generic import RedirectView
+
 from djangoautoconf.class_based_views.create_view_factory import create_ajaxable_view_from_model
 from resource_daily_scheduler.booking_req_views import AjaxableBookingRequestCreateView, \
     AjaxableBookingRequestUpdateView, GetScheduleView, ApproveRequestView
@@ -41,17 +42,16 @@ urlpatterns = patterns(
         ResourceViewFactory(BookableResource).get_update_view_class().as_view(success_url="../"),
         name="update_resource"),
     # Used for returning from the above
-    url(r'^update_resource/$', redirect_to, {'url': '../'}),
-
+    url(r'^update_resource/$', RedirectView.as_view(url='../')),
     url(r'^create_booking_req/', AjaxableBookingRequestCreateView.as_view(),
         name="create_booking_req"),
 
     url(r'^req_update/(?P<pk>[0-9]+)/$', login_required(AjaxableBookingRequestUpdateView.as_view()),
         name="request_update"),
-    url(r'^req_update/$', redirect_to, {'url': '../'}),
+    url(r'^req_update/$', RedirectView.as_view(url= '../')),
     url(r'^req_update_ajax/(?P<pk>[0-9]+)/$', login_required(AjaxableBookingRequestUpdateView.as_view(
         template_name="ajax_base.html")),
         name="request_update_ajax"),
     # Used for returning from the above
-    url(r'^req_update_ajax/$', redirect_to, {'url': '../'}),
+    url(r'^req_update_ajax/$', RedirectView.as_view(url='../')),
 )
