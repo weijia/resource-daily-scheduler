@@ -258,7 +258,10 @@ $.widget( "resourceScheduler.tableCalendar", {
     },
     getDateLeftFromDateStr: function(eventStartDate){
         var eventDateTd = $(".headerTable td[date="+eventStartDate+"]");
-        var left = eventDateTd.offset().left - eventDateTd.parent().parent().offset().left;
+        var left = 0;
+        if(eventDateTd.length>0){
+            var left = eventDateTd.offset().left - eventDateTd.parent().parent().offset().left;
+        }
         return left;    
     },
     getDateLeftFromMoment: function(momentDate){
