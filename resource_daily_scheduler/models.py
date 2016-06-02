@@ -69,10 +69,10 @@ class BookingRequest(BookingRequestBase):
         return unicode("%s: %s - %s" % (self.requester.username, str(self.start), str(self.end)))
 
 
-import eav
-eav.register(BookableResource)
-
-
-from south.modelsinspector import add_ignored_fields
-add_ignored_fields(["^eav\.fields\.EavDatatypeField"])
-add_ignored_fields(["^eav\.fields\.EavSlugField"])
+# import eav
+# eav.register(BookableResource)
+#
+#
+# from south.modelsinspector import add_ignored_fields
+# add_ignored_fields(["^eav\.fields\.EavDatatypeField"])
+# add_ignored_fields(["^eav\.fields\.EavSlugField"])
