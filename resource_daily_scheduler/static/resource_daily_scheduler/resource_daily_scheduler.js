@@ -41,6 +41,19 @@ function hasCreatePermission(){
     return isAdmin;
 }
 
+var gTodoLegend = ["Waiting for your approval", "Approved, you can change"//, "Ongoing"
+];
+
+
+function isTodoItem(legendText){
+    for(var index in gTodoLegend){
+            if(legendText==gTodoLegend[index])
+                return true
+    }
+    return false;
+}
+
+
 $(function() { // document ready
     $('.datepicker').datepicker();
 //    $(".fc-time").hide();
@@ -110,7 +123,14 @@ $(function() { // document ready
     $('#bookingReqEditForm').ajaxForm({
         success: function(data){
             if(data.pk){
+//                $("#id_update-end").datepicker("hide");
+//                $("#id_update-start").datepicker("hide");
+//                $('#ui-datepicker-div').hide();
+//                $("#id_update-start").blur();
+//                $("#id_update-end").blur();
+//                $("id_project").focus();
                 $( "#bookingReqEditDialog" ).dialog("close");
+//                $('#ui-datepicker-div').hide();
     //            $('#calendar').fullCalendar(
     //                        'addResource',
     //                        { title: data.title },
@@ -127,8 +147,15 @@ $(function() { // document ready
             alert("Update error, please contact admin!")
         }
     });
-
-
+    var legendHtml = "";
+    $.each(eventColors, function(key, value){
+        var classAttr = "legend";
+        if(isTodoItem(key)){
+            classAttr += " todo"
+        }
+        legendHtml += '<div class="'+classAttr+'" style="background-color:'+value+'">'+key+'</div>';
+    });
+    $("#legendArea").html(legendHtml);
 });
 
 function redirectToUrl(target){
@@ -152,12 +179,24 @@ function onDayClicked(date, jsEvent, view, resourceObj) {
         return;
     }
     $( "#newBookingReqDialog" ).dialog("open");
+    $("#id_end").datepicker( "option", "minDate", $("#id_start").datepicker( "getDate" ) );
     $("#id_end").focus();
     $("#id_resource").val(resourceObj.id);
 }
 
 var dateObjForGettingTimeZoneOffset = new Date();
 var currentTimeZoneOffsetInHours = dateObjForGettingTimeZoneOffset.getTimezoneOffset() / 60;
+
+
+function isAdminFor(event){
+//    if((event.color=="red")//||(event.color=="blue")
+//    ) return true;
+    for(var index in gTodoLegend){
+            if(event.color==eventColors[gTodoLegend[index]])
+                return true
+    }
+    return false;
+}
 
 
 function onEventClick(calEvent, jsEvent, view) {
@@ -172,7 +211,8 @@ function onEventClick(calEvent, jsEvent, view) {
 //    $(this).css('border-color', 'red');
 
     var targetEvent = $(this);
-    if(!isApprover()) return;
+//    if(!isApprover()) return;
+    if(!isAdminFor(calEvent)) return;
 
     if(!isDialogSupported()){
         redirectToUrl('req_update/'+calEvent.id +'/');
@@ -183,6 +223,9 @@ function onEventClick(calEvent, jsEvent, view) {
 //        $( "#bookingReqEditDialog" ).dialog({"width": "800px"});
         $("#id_update-start").datepicker();
         $("#id_update-end").datepicker();
+
+        $("#id_update-end").datepicker( "option", "minDate", $("#id_update-start").datepicker( "getDate" ) );
+
         $("#bookingReqEditForm").attr("action", 'req_update/'+calEvent.id +'/');
         $( "#bookingReqEditDialog" ).dialog("open");
     });

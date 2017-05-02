@@ -32,4 +32,7 @@ Then use it in a project::
 Features
 --------
 
+* Resource creation permission is customizable when the following class attribute is overrided
+    class ResourceScheduleTemplateView(TemplateView, ColorSchema):
+        resource_permission_id = "resource_daily_scheduler.change_bookableresource"
 * TODO

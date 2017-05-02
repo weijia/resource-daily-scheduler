@@ -7,7 +7,7 @@
 {{ block.super }}
 <script type='text/javascript' src="{% static 'js/jquery-ui.js' %}"></script>
 <link rel='stylesheet' type='text/css' href="{% static 'css/jquery-ui/smoothness/jquery-ui.css' %}" />
-<script src="{% static resource_daily_scheduler/csrf.js' %}"></script>
+<script src="{% static 'resource_daily_scheduler/csrf.js' %}"></script>
 {% endblock %}
 {% block content %}
 {% include "ajax_base.html" %}
