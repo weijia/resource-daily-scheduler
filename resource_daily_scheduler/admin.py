@@ -4,7 +4,7 @@ import models
 factory = AdminRegister()
 
 factory.register_all_model(models)
-from reversion.helpers import patch_admin
-
-patch_admin(models.BookingRequest)
-patch_admin(models.BookableResource)
+# from reversion.helpers import patch_admin
+#
+# patch_admin(models.BookingRequest)
+# patch_admin(models.BookableResource)
