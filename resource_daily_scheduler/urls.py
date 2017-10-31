@@ -39,17 +39,17 @@ urlpatterns = patterns(
         ResourceViewFactory(BookableResource).get_update_view_class().as_view(success_url="../"),
         name="update_resource"),
     # Used for returning from the above
-    url(r'^update_resource/$', RedirectView.as_view(url='../')),
+    url(r'^update_resource/$', RedirectView.as_view(url='../', permanent=False)),
 
     url(r'^create_booking_req/', AjaxableBookingRequestCreateView.as_view(),
         name="create_booking_req"),
 
     url(r'^req_update/(?P<pk>[0-9]+)/$', login_required(AjaxableBookingRequestUpdateView.as_view()),
         name="request_update"),
-    url(r'^req_update/$', RedirectView.as_view(url='../')),
+    url(r'^req_update/$', RedirectView.as_view(url='../', permanent=False)),
     url(r'^req_update_ajax/(?P<pk>[0-9]+)/$', login_required(AjaxableBookingRequestUpdateView.as_view(
         template_name="ajax_base.html")),
         name="request_update_ajax"),
     # Used for returning from the above
-    url(r'^req_update_ajax/$', RedirectView.as_view(url='../')),
+    url(r'^req_update_ajax/$', RedirectView.as_view(url='../', permanent=False)),
 )
